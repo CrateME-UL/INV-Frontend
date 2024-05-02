@@ -1,6 +1,6 @@
 # Frontend
 
-## vscode extensions to install general
+## vscode extensions to install in general
 
 - yzhang.markdown-all-in-one
 - formulahendry.code-runner
@@ -20,6 +20,7 @@
 - mikestead.dotenv
 - aaron-bond.better-comments
 - ms-vscode.notepadplusplus-keybindings
+- ms-vsliveshare.vsliveshare
 
 ## vscode extensions to install for react and typescript/javascript
 
