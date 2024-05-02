@@ -36,3 +36,4 @@
 - stringham.move-ts
 - WallabyJs.quokka-vscode
 - formulahendry.auto-rename-tag
+- ritwickdey.LiveServer
