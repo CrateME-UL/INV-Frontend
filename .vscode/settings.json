@@ -30,5 +30,16 @@
         "wayou",
         "yzhang",
         "ritwickdey",
-    ]
+    ],
+    // enable globally (here: format on save)
+    "editor.formatOnSave": true,
+    // enable per-language (here: Prettier as formatter)
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    //try to fix lint on save
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.validate": ["javascript"],
 }
