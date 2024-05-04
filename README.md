@@ -81,4 +81,4 @@ npm create vite@latest hacker-stories -- --template react-ts
   ]
 ```
 
-## follow the epub the-road-to-react for for more informations
+## follow the epub the-road-to-react for for more information
