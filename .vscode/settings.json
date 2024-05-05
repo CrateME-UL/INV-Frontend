@@ -14,6 +14,7 @@
     "formulahendry",
     "hediet",
     "hykin",
+    "Inventaire",
     "johnpapa",
     "kisstkondoros",
     "mhutchie",
@@ -22,14 +23,14 @@
     "pmneo",
     "polacode",
     "quokka",
+    "ritwickdey",
     "stringham",
     "stylelint",
     "tabnine",
     "tsimporter",
     "usernamehw",
     "wayou",
-    "yzhang",
-    "ritwickdey"
+    "yzhang"
   ],
   // enable globally (here: format on save)
   "editor.formatOnSave": true,
