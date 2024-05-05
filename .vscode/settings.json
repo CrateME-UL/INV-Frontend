@@ -1,34 +1,59 @@
 {
-    "cSpell.words": [
-        "azuretools",
-        "burkeholland",
-        "Chakroun",
-        "codemetrics",
-        "codetour",
-        "dbaeumer",
-        "drawio",
-        "DSKWRK",
-        "dsznajder",
-        "eamodio",
-        "errorlens",
-        "formulahendry",
-        "hediet",
-        "hykin",
-        "johnpapa",
-        "kisstkondoros",
-        "mhutchie",
-        "mikestead",
-        "notepadplusplus",
-        "pmneo",
-        "polacode",
-        "quokka",
-        "stringham",
-        "stylelint",
-        "tabnine",
-        "tsimporter",
-        "usernamehw",
-        "wayou",
-        "yzhang",
-        "ritwickdey",
-    ]
+  "cSpell.words": [
+    "azuretools",
+    "burkeholland",
+    "Chakroun",
+    "codemetrics",
+    "codetour",
+    "dbaeumer",
+    "drawio",
+    "DSKWRK",
+    "dsznajder",
+    "eamodio",
+    "errorlens",
+    "formulahendry",
+    "hediet",
+    "hykin",
+    "johnpapa",
+    "kisstkondoros",
+    "mhutchie",
+    "mikestead",
+    "notepadplusplus",
+    "pmneo",
+    "polacode",
+    "quokka",
+    "stringham",
+    "stylelint",
+    "tabnine",
+    "tsimporter",
+    "usernamehw",
+    "wayou",
+    "yzhang",
+    "ritwickdey"
+  ],
+  // enable globally (here: format on save)
+  "editor.formatOnSave": true,
+  // enable per-language (here: Prettier as formatter)
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  //try to fix lint on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact"
+  ]
 }

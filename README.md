@@ -1,5 +1,14 @@
 # Frontend
 
+## to run the App
+
+```bash
+npm install
+npm run dev
+```
+
+## to run lint/prettier: save file
+
 ## vscode extensions to install in general
 
 - yzhang.markdown-all-in-one
@@ -36,5 +45,40 @@
 - kisstkondoros.vscode-codemetrics
 - stringham.move-ts
 - WallabyJs.quokka-vscode
-- formulahendry.auto-rename-tag
-- ritwickdey.LiveServer
+
+## to setup react with lint and prettier
+
+https://www.robinwieruch.de/prettier-eslint/
+
+## to setup react with typescript
+
+https://www.robinwieruch.de/vite-typescript/
+
+## create from template react and typescript
+
+```bash
+npm create vite@latest hacker-stories -- --template react-ts
+```
+
+## add to ./.vscode/settings.json
+
+```json
+  // enable globally (here: format on save)
+  "editor.formatOnSave": true,
+  // enable per-language (here: Prettier as formatter)
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  //try to fix lint on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": [
+    "javascript,",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact"
+  ]
+```
+
+## follow the epub the-road-to-react for for more information
