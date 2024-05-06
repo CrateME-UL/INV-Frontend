@@ -65,7 +65,7 @@ type ListProps = {
 const List = (props: ListProps) => (
   <ul>
     {props.list.map((item) => (
-      <Item item={item} />
+      <Item key={item.objectID} item={item} />
     ))}
   </ul>
 );
