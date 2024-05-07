@@ -24,24 +24,34 @@ const App = () => {
       objectID: 1,
     },
   ];
+  const handleSearch = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    console.log(event.target.value);
+  };
   return (
     <div>
       <h1>
         Hello {welcome.greeting} {welcome.title}
       </h1>
-      <Search />
+      <Search onSearch={handleSearch} />
       <hr />
       <List list={stories} />
     </div>
   );
 };
 
-const Search = () => {
+type SearchProps = {
+  onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const Search = (props: SearchProps) => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSearchTerm(event.target.value);
+    props.onSearch(event);
   };
   return (
     <div>
