@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 const welcome = {
   greeting: 'hey',
   title: 'React',
@@ -35,16 +37,19 @@ const App = () => {
 };
 
 const Search = () => {
+  const [searchTerm, setSearchTerm] = React.useState('');
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    console.log(event);
-    console.log(event.target.value);
+    setSearchTerm(event.target.value);
   };
   return (
     <div>
       <label htmlFor="search">Search: </label>
       <input id="search" type="text" onChange={handleChange} />
+      <p>
+        Searching for <strong>{searchTerm}</strong>.
+      </p>
     </div>
   );
 };
@@ -74,7 +79,6 @@ type ItemProps = {
   item: Story;
 };
 
-export default App;
 const Item = (props: ItemProps) => (
   <li key={props.item.objectID}>
     <span>
@@ -85,3 +89,5 @@ const Item = (props: ItemProps) => (
     <span>and {props.item.points} points</span>
   </li>
 );
+
+export default App;
