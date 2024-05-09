@@ -87,6 +87,3 @@ const Item = ({ item }: ItemProps) => (
 );
 
 export default App;
-function setUsers(data: any): any {
-  throw new Error('Function not implemented.');
-}
