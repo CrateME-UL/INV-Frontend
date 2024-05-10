@@ -71,7 +71,7 @@ type SearchProps = {
 
 const Search = ({ search, onSearch }: SearchProps) => {
   return (
-    <div>
+    <>
       <label htmlFor="search">Search: </label>
       <input
         id="search"
@@ -79,7 +79,7 @@ const Search = ({ search, onSearch }: SearchProps) => {
         value={search}
         onChange={onSearch}
       />
-    </div>
+    </>
   );
 };
 
