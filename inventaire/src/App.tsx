@@ -5,6 +5,18 @@ const welcome = {
   title: 'React',
 };
 
+const useStorageState = (key: string, initialState: string) => {
+  const [value, setValue] = React.useState(
+    localStorage.getItem(key) || initialState
+  );
+
+  React.useEffect(() => {
+    localStorage.setItem(key, value);
+  }, [value, key]);
+
+  return [value, setValue] as const;
+};
+
 const App = () => {
   const stories = [
     {
@@ -25,13 +37,10 @@ const App = () => {
     },
   ];
 
-  const [searchTerm, setSearchTerm] = React.useState(
-    localStorage.getItem('search') || 'React'
+  const [searchTerm, setSearchTerm] = useStorageState(
+    'search',
+    'React'
   );
-
-  React.useEffect(() => {
-    localStorage.setItem('search', searchTerm);
-  }, [searchTerm]);
 
   const handleSearch = (
     event: React.ChangeEvent<HTMLInputElement>
