@@ -82,3 +82,13 @@ npm create vite@latest hacker-stories -- --template react-ts
 ```
 
 ## follow the epub the-road-to-react for for more information
+
+## guide for scss -> make sure to code in styles.module.scss
+
+https://sass-lang.com/guide/
+
+## run this commmand in the styles folder in another terminal to autocompile css from change scss (install sass on computer)
+
+```console
+sass --watch styles.module.scss styles.module.css
+```

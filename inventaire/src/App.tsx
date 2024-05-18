@@ -1,4 +1,5 @@
 import * as React from 'react';
+import styles from './styles/styles.module.css';
 
 const welcome = {
   greeting: 'hey',
@@ -71,15 +72,17 @@ type SearchProps = {
 
 const Search = ({ search, onSearch }: SearchProps) => {
   return (
-    <>
-      <label htmlFor="search">Search: </label>
+    <div className={styles.search}>
+      <label htmlFor="search" className={styles.input}>
+        Search:{' '}
+      </label>
       <input
         id="search"
         type="text"
         value={search}
         onChange={onSearch}
       />
-    </>
+    </div>
   );
 };
 
@@ -97,11 +100,13 @@ type ListProps = {
 };
 
 const List = ({ list }: ListProps) => (
-  <ul>
-    {list.map((item) => (
-      <Item key={item.objectID} item={item} />
-    ))}
-  </ul>
+  <>
+    <ul className={styles.list}>
+      {list.map((item) => (
+        <Item key={item.objectID} item={item} />
+      ))}
+    </ul>
+  </>
 );
 
 type ItemProps = {
@@ -109,8 +114,8 @@ type ItemProps = {
 };
 
 const Item = ({ item }: ItemProps) => (
-  <li key={item.objectID}>
-    <span>
+  <li key={item.objectID} className={styles.item}>
+    <span className={styles.input}>
       <a href={item.url}>{item.title}</a> by {item.author}
     </span>
     <span>with {item.num_comments} comments </span>
