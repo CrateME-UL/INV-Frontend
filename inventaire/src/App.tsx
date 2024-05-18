@@ -60,11 +60,12 @@ const App = () => {
       </h1>
       <InputWithLabel
         id="search"
-        label="Search"
         type="text"
         value={searchTerm}
         onInputChange={handleSearch}
-      />
+      >
+        <strong>Search:</strong>
+      </InputWithLabel>
       <hr />
       <List list={searchedStories} />
     </div>
@@ -73,7 +74,7 @@ const App = () => {
 
 type InputWithLabelProps = {
   id: string;
-  label: string;
+  children: React.ReactNode;
   value: string;
   type?: string;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -81,13 +82,13 @@ type InputWithLabelProps = {
 
 const InputWithLabel = ({
   id,
-  label,
   value,
+  children,
   type = 'text',
   onInputChange,
 }: InputWithLabelProps) => (
   <div className={styles.search}>
-    <label htmlFor={id}>{label}</label>
+    <label htmlFor={id}>{children}</label>
     &nbsp;
     <input
       id={id}
