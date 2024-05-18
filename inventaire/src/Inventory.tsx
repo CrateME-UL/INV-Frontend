@@ -1,7 +1,12 @@
 import * as React from 'react';
-import { ItemProps, ListProps, SearchProps, ItemType } from './types/types';
+import {
+  ItemProps,
+  ListProps,
+  SearchProps,
+  ItemType,
+} from './types/types';
 import { ItemDto } from './types/typesDto';
-import { mapItemDtoToModels } from './mapper/mapperToComponent';
+import { mapItemDtoToModels } from './mapper/mapperToComponent/ItemsMapperToComponent';
 
 const welcome = {
   greeting: 'List by object types!',
@@ -30,14 +35,14 @@ const App = () => {
 
   const searchedItems = items.filter((item: ItemDto) => {
     console.log(mapItemDtoToModels(item));
-    const itemModel : ItemType = mapItemDtoToModels(item);
-    return itemModel.itemName.toLowerCase().includes(searchTerm.toLowerCase())
-  })
-
+    const itemModel: ItemType = mapItemDtoToModels(item);
+    return itemModel.itemName
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div>
-
       <h1>Hello {welcome.greeting}</h1>
       <Search search={searchTerm} onSearch={handleSearch} />
       <hr />
@@ -77,4 +82,3 @@ const Item = ({ item }: ItemProps) => (
 );
 
 export default App;
-
