@@ -58,33 +58,46 @@ const App = () => {
       <h1>
         Hello {welcome.greeting} {welcome.title}
       </h1>
-      <Search search={searchTerm} onSearch={handleSearch} />
+      <InputWithLabel
+        id="search"
+        label="Search"
+        type="text"
+        value={searchTerm}
+        onInputChange={handleSearch}
+      />
       <hr />
       <List list={searchedStories} />
     </div>
   );
 };
 
-type SearchProps = {
-  search: string;
-  onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+type InputWithLabelProps = {
+  id: string;
+  label: string;
+  value: string;
+  type?: string;
+  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Search = ({ search, onSearch }: SearchProps) => {
-  return (
-    <div className={styles.search}>
-      <label htmlFor="search" className={styles.input}>
-        Search:{' '}
-      </label>
-      <input
-        id="search"
-        type="text"
-        value={search}
-        onChange={onSearch}
-      />
-    </div>
-  );
-};
+const InputWithLabel = ({
+  id,
+  label,
+  value,
+  type = 'text',
+  onInputChange,
+}: InputWithLabelProps) => (
+  <div className={styles.search}>
+    <label htmlFor={id}>{label}</label>
+    &nbsp;
+    <input
+      id={id}
+      className={styles.input}
+      type={type}
+      value={value}
+      onChange={onInputChange}
+    />
+  </div>
+);
 
 type Story = {
   title: string;
