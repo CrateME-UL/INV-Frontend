@@ -7,6 +7,7 @@ import {
 } from './types/types';
 import { ItemDto } from './types/typesDto';
 import { mapItemDtoToModels } from './mapper/mapperToComponent/ItemsMapperToComponent';
+//TODO: add env variable for link to server
 
 const welcome = {
   greeting: 'List by object types!',
@@ -17,7 +18,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
 
   React.useEffect(() => {
-    fetch('http://127.0.0.1:5432/items')
+    fetch('http://0.0.0.0:3000/items')
       .then((response) => response.json())
       .then((data) => setItems(data))
       .catch((error) => console.error('Error fetching data:', error));
