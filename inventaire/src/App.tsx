@@ -61,6 +61,7 @@ const App = () => {
       <InputWithLabel
         id="search"
         type="text"
+        isFocused
         value={searchTerm}
         onInputChange={handleSearch}
       >
@@ -77,6 +78,7 @@ type InputWithLabelProps = {
   children: React.ReactNode;
   value: string;
   type?: string;
+  isFocused: boolean;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -85,20 +87,34 @@ const InputWithLabel = ({
   value,
   children,
   type = 'text',
+  isFocused,
   onInputChange,
-}: InputWithLabelProps) => (
-  <div className={styles.search}>
-    <label htmlFor={id}>{children}</label>
-    &nbsp;
-    <input
-      id={id}
-      className={styles.input}
-      type={type}
-      value={value}
-      onChange={onInputChange}
-    />
-  </div>
-);
+}: InputWithLabelProps) => {
+  //ici on utilise une méthode impérative, bien que déclarative possible
+  //(utile pour des cas spécifiques ou un certain rendu n'est pas possible, mais si possible: utiliser une méthode déclarative. Autrement dit, faire abstraction de la complexité)
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    if (isFocused && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isFocused]);
+  return (
+    <div className={styles.search}>
+      <label htmlFor={id}>{children}</label>
+      &nbsp;
+      <input
+        ref={inputRef}
+        id={id}
+        className={styles.input}
+        type={type}
+        value={value}
+        autoFocus={isFocused}
+        onChange={onInputChange}
+      />
+    </div>
+  );
+};
 
 type Story = {
   title: string;
