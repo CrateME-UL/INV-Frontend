@@ -1,11 +1,11 @@
 export type PlaceType = {
-  placeId: string;
+  placeId: number;
   placeName: string;
   placeType: string;
 };
 
 export type ItemType = {
-  itemId: string;
+  itemId: number;
   place: PlaceType;
   nbOfItems: number;
   itemName: string;
