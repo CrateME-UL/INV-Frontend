@@ -6,6 +6,25 @@ const welcome = {
   title: 'React',
 };
 
+const initialStories = [
+  {
+    title: 'React',
+    url: 'https://reactjs.org/',
+    author: 'Jordan Walke',
+    num_comments: 3,
+    points: 4,
+    objectID: 0,
+  },
+  {
+    title: 'Redux',
+    url: 'https://redux.js.org/',
+    author: 'Dan Abramov, Andrew Clark',
+    num_comments: 2,
+    points: 5,
+    objectID: 1,
+  },
+];
+
 const useStorageState = (key: string, initialState: string) => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
@@ -19,24 +38,15 @@ const useStorageState = (key: string, initialState: string) => {
 };
 
 const App = () => {
-  const stories = [
-    {
-      title: 'React',
-      url: 'https://reactjs.org/',
-      author: 'Jordan Walke',
-      num_comments: 3,
-      points: 4,
-      objectID: 0,
-    },
-    {
-      title: 'Redux',
-      url: 'https://redux.js.org/',
-      author: 'Dan Abramov, Andrew Clark',
-      num_comments: 2,
-      points: 5,
-      objectID: 1,
-    },
-  ];
+  const [stories, setStories] = React.useState(initialStories);
+
+  const handleRemoveStory = (item: Story) => {
+    const newStories = stories.filter(
+      (story) => item.objectID !== story.objectID
+    );
+
+    setStories(newStories);
+  };
 
   const [searchTerm, setSearchTerm] = useStorageState(
     'search',
@@ -68,7 +78,7 @@ const App = () => {
         <strong>Search:</strong>
       </InputWithLabel>
       <hr />
-      <List list={searchedStories} />
+      <List list={searchedStories} onRemoveItem={handleRemoveStory} />
     </div>
   );
 };
@@ -127,13 +137,18 @@ type Story = {
 
 type ListProps = {
   list: Story[];
+  onRemoveItem: (story: Story) => void;
 };
 
-const List = ({ list }: ListProps) => (
+const List = ({ list, onRemoveItem }: ListProps) => (
   <>
     <ul className={styles.list}>
       {list.map((item) => (
-        <Item key={item.objectID} item={item} />
+        <Item
+          key={item.objectID}
+          item={item}
+          onRemoveItem={onRemoveItem}
+        />
       ))}
     </ul>
   </>
@@ -141,16 +156,33 @@ const List = ({ list }: ListProps) => (
 
 type ItemProps = {
   item: Story;
+  onRemoveItem: (story: Story) => void;
 };
 
-const Item = ({ item }: ItemProps) => (
-  <li key={item.objectID} className={styles.item}>
-    <span className={styles.input}>
-      <a href={item.url}>{item.title}</a> by {item.author}
-    </span>
-    <span>with {item.num_comments} comments </span>
-    <span>and {item.points} points</span>
-  </li>
-);
+const Item = ({ item, onRemoveItem }: ItemProps) => {
+  // const handleRemoveItem = () => {
+  //   onRemoveItem(item);
+  // };
+
+  return (
+    <li key={item.objectID} className={styles.item}>
+      <span className={styles.input}>
+        <a href={item.url}>{item.title}</a> by {item.author}
+      </span>
+      <span>with {item.num_comments} comments </span>
+      <span>and {item.points} points</span>
+      {/* <span>
+        <button type="button" onClick={handleRemoveItem}>
+          Dismiss
+        </button>
+      </span> */}
+      <span>
+        <button type="button" onClick={() => onRemoveItem(item)}>
+          Dismiss (inline)
+        </button>
+      </span>
+    </li>
+  );
+};
 
 export default App;
