@@ -6,45 +6,69 @@ const welcome = {
   title: 'React',
 };
 
-const initialStories = [
-  {
-    title: 'React',
-    url: 'https://reactjs.org/',
-    author: 'Jordan Walke',
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: 'Redux',
-    url: 'https://redux.js.org/',
-    author: 'Dan Abramov, Andrew Clark',
-    num_comments: 2,
-    points: 5,
-    objectID: 1,
-  },
-];
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
-const getAsyncStories = (): Promise<{ data: { stories: Story[] } }> =>
-  new Promise((resolve) =>
-    setTimeout(
-      () => resolve({ data: { stories: initialStories } }),
-      2000
-    )
-  );
+type StoriesState = {
+  data: Story[];
+  isLoading: boolean;
+  isError: boolean;
+};
 
-type Action =
-  | { type: 'SET_STORIES'; payload: Story[] }
-  | { type: 'REMOVE_STORY'; payload: Story };
+type StoriesFetchInitAction = {
+  type: 'STORIES_FETCH_INIT';
+};
 
-const storiesReducer = (state: Story[], action: Action) => {
+type StoriesFetchSuccessAction = {
+  type: 'STORIES_FETCH_SUCCESS';
+  payload: Story[];
+};
+
+type StoriesFetchFailureAction = {
+  type: 'STORIES_FETCH_FAILURE';
+};
+
+type StoriesRemoveAction = {
+  type: 'REMOVE_STORY';
+  payload: Story;
+};
+
+type StoriesAction =
+  | StoriesFetchInitAction
+  | StoriesFetchSuccessAction
+  | StoriesFetchFailureAction
+  | StoriesRemoveAction;
+
+const storiesReducer = (
+  state: StoriesState,
+  action: StoriesAction
+) => {
   switch (action.type) {
-    case 'SET_STORIES':
-      return action.payload;
+    case 'STORIES_FETCH_INIT':
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+      };
+    case 'STORIES_FETCH_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        data: action.payload,
+      };
+    case 'STORIES_FETCH_FAILURE':
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
     case 'REMOVE_STORY':
-      return state.filter(
-        (story: Story) => action.payload.objectID !== story.objectID
-      );
+      return {
+        ...state,
+        data: state.data.filter(
+          (story) => action.payload.objectID !== story.objectID
+        ),
+      };
     default:
       throw new Error();
   }
@@ -64,23 +88,23 @@ const useStorageState = (key: string, initialState: string) => {
 const App = () => {
   const [stories, dispatchStories] = React.useReducer(
     storiesReducer,
-    []
+    { data: [], isLoading: false, isError: false }
   );
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false);
 
   React.useEffect(() => {
-    setIsLoading(true);
+    dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
-    getAsyncStories()
+    fetch(`${API_ENDPOINT}react`)
+      .then((response) => response.json())
       .then((result) => {
         dispatchStories({
-          type: 'SET_STORIES',
-          payload: result.data.stories,
+          type: 'STORIES_FETCH_SUCCESS',
+          payload: result.hits,
         });
-        setIsLoading(false);
       })
-      .catch(() => setIsError(true));
+      .catch(() =>
+        dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
+      );
   }, []);
 
   const handleRemoveStory = (item: Story) => {
@@ -101,7 +125,7 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
-  const searchedStories = stories.filter((story: Story) =>
+  const searchedStories = stories.data.filter((story: Story) =>
     story.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -120,8 +144,8 @@ const App = () => {
         <strong>Search:</strong>
       </InputWithLabel>
       <hr />
-      {isError && <p>Something went wrong ...</p>}
-      {isLoading ? (
+      {stories.isError && <p>Something went wrong ...</p>}
+      {stories.isLoading ? (
         <p>Loading ...</p>
       ) : (
         <List
@@ -210,25 +234,16 @@ type ItemProps = {
 };
 
 const Item = ({ item, onRemoveItem }: ItemProps) => {
-  // const handleRemoveItem = () => {
-  //   onRemoveItem(item);
-  // };
-
   return (
     <li key={item.objectID} className={styles.item}>
       <span className={styles.input}>
         <a href={item.url}>{item.title}</a> by {item.author}
       </span>
-      <span>with {item.num_comments} comments </span>
-      <span>and {item.points} points</span>
-      {/* <span>
-        <button type="button" onClick={handleRemoveItem}>
-          Dismiss
-        </button>
-      </span> */}
+      <span> with {item.num_comments} comments </span>
+      <span>and {item.points} points </span>
       <span>
         <button type="button" onClick={() => onRemoveItem(item)}>
-          Dismiss (inline)
+          Dismiss
         </button>
       </span>
     </li>
