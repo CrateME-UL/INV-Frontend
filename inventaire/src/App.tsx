@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import styles from './styles/styles.module.css';
 
 const welcome = {
@@ -100,20 +101,17 @@ const App = () => {
     { data: [], isLoading: false, isError: false }
   );
 
-  const handleFetchStories = React.useCallback(() => {
-    dispatchStories({ type: 'STORIES_FETCH_INIT' });
+  const handleFetchStories = React.useCallback(async () => {
+    try {
+      const result = await axios.get(url);
 
-    fetch(url)
-      .then((response) => response.json())
-      .then((result) => {
-        dispatchStories({
-          type: 'STORIES_FETCH_SUCCESS',
-          payload: result.hits,
-        });
-      })
-      .catch(() =>
-        dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
-      );
+      dispatchStories({
+        type: 'STORIES_FETCH_SUCCESS',
+        payload: result.data.hits,
+      });
+    } catch {
+      dispatchStories({ type: 'STORIES_FETCH_FAILURE' });
+    }
   }, [url]);
 
   React.useEffect(() => {
