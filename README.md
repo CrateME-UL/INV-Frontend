@@ -1,14 +1,5 @@
 # Frontend
 
-## to run the App
-
-```bash
-npm install
-npm run dev
-```
-
-## to run lint/prettier: save file
-
 ## vscode extensions to install in general
 
 - yzhang.markdown-all-in-one
@@ -91,4 +82,19 @@ https://sass-lang.com/guide/
 
 ```console
 sass --watch styles.module.scss styles.module.css
+```
+
+## to run the App (in inventaire dir)
+
+```bash
+npm install
+npm run dev
+```
+
+## to run lint/prettier: save file
+
+## to build the docker image:
+
+```
+docker build -t inv-ui .
 ```
