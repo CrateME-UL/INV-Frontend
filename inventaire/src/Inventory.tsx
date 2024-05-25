@@ -18,7 +18,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
 
   React.useEffect(() => {
-    fetch('http://0.0.0.0:3000/items')
+    fetch('http://localhost:3000/items')
       .then((response) => response.json())
       .then((data) => setItems(data))
       .catch((error) => console.error('Error fetching data:', error));
@@ -74,12 +74,15 @@ const List = ({ list }: ListProps) => (
   </ul>
 );
 
-const Item = ({ item }: ItemProps) => (
-  <li key={item.itemId}>
-    <span>
-      {item.itemName}: {item.nbOfItems}
-    </span>
-  </li>
-);
+const Item = ({ item }: ItemProps) => {
+  console.log(item);
+  return (
+    <li key={item.itemId}>
+      <span>
+        {item.itemName}: {item.nbOfItems}
+      </span>
+    </li>
+  );
+};
 
 export default App;
