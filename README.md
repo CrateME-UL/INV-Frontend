@@ -1,14 +1,5 @@
 # Frontend
 
-## to run the App
-
-```bash
-npm install
-npm run dev
-```
-
-## to run lint/prettier: save file
-
 ## vscode extensions to install in general
 
 - yzhang.markdown-all-in-one
@@ -82,3 +73,28 @@ npm create vite@latest hacker-stories -- --template react-ts
 ```
 
 ## follow the epub the-road-to-react for for more information
+
+## guide for scss -> make sure to code in styles.module.scss
+
+https://sass-lang.com/guide/
+
+## run this commmand in the styles folder in another terminal to autocompile css from change scss (install sass on computer)
+
+```console
+sass --watch styles.module.scss styles.module.css
+```
+
+## to run the App (in inventaire dir)
+
+```bash
+npm install
+npm run dev
+```
+
+## to run lint/prettier: save file
+
+## to build the docker image:
+
+```
+docker build -t inv-ui .
+```
