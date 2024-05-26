@@ -24,4 +24,8 @@ $color3: rgb(78, 255, 55);
 .item {
     @include theme($theme: $color2);
 }
+.list {
+    flex-wrap: wrap;
+    width: 100%;
+}
     
