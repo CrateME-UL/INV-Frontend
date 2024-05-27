@@ -1,12 +1,10 @@
 import * as React from 'react';
 
-import { ItemModel } from './types/ModelType';
-import { getItems } from './API';
-import { FetchSnackbar } from './components/FetchSnackbar';
-import { CustomDataGrid } from './components/CustomDataGrid';
+import { ItemModel } from '../../types/ModelType';
+import { getItems } from '../../API';
+import { FetchSnackbar } from '../../components/FetchSnackbar';
+import { CustomDataGrid } from '../../components/CustomDataGrid';
 import { GridColDef } from '@mui/x-data-grid';
-
-//TODO: add tests
 
 const ItemInventory = () => {
   const columns: GridColDef[] = [
