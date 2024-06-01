@@ -4,6 +4,7 @@ import { describe, it, vi, expect, Mock } from 'vitest';
 import ItemInventory from './ItemInventory';
 import { getItems } from '../../API';
 import { ItemModel } from '../../types/ModelType';
+import { v4 as uuid } from 'uuid';
 
 vi.mock('../../API', () => ({
   getItems: vi.fn(),
@@ -17,8 +18,18 @@ describe('ItemInventory', () => {
 
   it('fetches and displays items', async () => {
     const mockItems: ItemModel[] = [
-      { itemId: 1, nbOfItems: 10, itemName: 'Item 1', placeId: 1 },
-      { itemId: 2, nbOfItems: 5, itemName: 'Item 2', placeId: 1 },
+      {
+        itemId: uuid(),
+        nbOfItems: 10,
+        itemName: 'Item 1',
+        placeId: 1,
+      },
+      {
+        itemId: uuid(),
+        nbOfItems: 5,
+        itemName: 'Item 2',
+        placeId: 1,
+      },
     ];
     (getItems as Mock).mockResolvedValue(mockItems);
 

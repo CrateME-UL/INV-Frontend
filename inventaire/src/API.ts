@@ -8,6 +8,7 @@ const API_ENDPOINT =
 export const getItems = async (): Promise<ItemModel[] | Error> => {
   try {
     const result = await axios.get(`${API_ENDPOINT}/items`);
+    console.log(result.data);
     return result.data.map(ItemDtoToModel);
   } catch {
     return new Error('Failed to fetch items');

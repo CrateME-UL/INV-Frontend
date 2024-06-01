@@ -5,7 +5,7 @@ export type PlaceDto = {
 };
 
 export type ItemDto = {
-  item_id: number;
+  item_id: string;
   item_name: string;
   nb_of_items: number;
   place_id: number;

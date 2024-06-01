@@ -5,7 +5,7 @@ export type PlaceModel = {
 };
 
 export type ItemModel = {
-  itemId: number;
+  itemId: string;
   itemName: string;
   nbOfItems: number;
   placeId: number;

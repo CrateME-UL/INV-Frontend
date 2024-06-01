@@ -17,6 +17,7 @@ const ItemInventory = () => {
   const handleFetchItems = async () => {
     try {
       const result = await getItems();
+      console.log(result);
       if (result instanceof Error) {
         setError('Something went wrong...');
       } else {
