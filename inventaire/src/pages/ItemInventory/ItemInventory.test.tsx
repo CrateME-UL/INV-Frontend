@@ -10,7 +10,7 @@ vi.mock('../../API', () => ({
 }));
 
 describe('ItemInventory', () => {
-  it('renders without crashing', () => {
+  it('render without crashing', () => {
     render(<ItemInventory />);
     expect(screen.getByText('Inventaire')).toBeInTheDocument();
   });
