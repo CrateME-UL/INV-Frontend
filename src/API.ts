@@ -1,15 +1,19 @@
 import axios from 'axios';
-import { ItemModel } from './types/ModelType';
-import { ItemDtoToModel } from './mapper/DtoToModelMapper/ItemDtoMapper';
 
 const API_ENDPOINT =
   import.meta.env.VITE_API_ENDPOINT || 'http://localhost:3000';
 
-export const getItems = async (): Promise<ItemModel[] | Error> => {
+export const getResponse = async <T>(
+  path: string,
+  params?: { [key: string]: string } | undefined
+): Promise<T | Error> => {
   try {
-    const result = await axios.get(`${API_ENDPOINT}/items`);
-    return result.data.map(ItemDtoToModel);
+    const result = await axios.get(
+      `${API_ENDPOINT}/${path}`,
+      params ? { params } : undefined
+    );
+    return result.data;
   } catch {
-    return new Error('Failed to fetch items');
+    return new Error('Failed to fetch data');
   }
 };

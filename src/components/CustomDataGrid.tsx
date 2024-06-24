@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, frFR } from '@mui/x-data-grid';
 
 type CustomDataGridProps<T> = {
   error: string | null;
@@ -29,6 +29,9 @@ export const CustomDataGrid = <T,>({
             }}
             disableColumnMenu
             pageSizeOptions={[5, 10]}
+            localeText={
+              frFR.components.MuiDataGrid.defaultProps.localeText
+            }
           />
         </div>
       )}

@@ -5,18 +5,19 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Snackbar from '@mui/material/Snackbar';
 import CloseIcon from '@mui/icons-material/Close';
+import SelectFilter from './SelectFilter';
 
 export function FetchSnackbar({
   title,
   fetchHandler,
 }: {
   title: string;
-  fetchHandler: () => void;
+  fetchHandler: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
-    fetchHandler();
+    fetchHandler;
     setOpen(true);
   };
 
@@ -45,17 +46,26 @@ export function FetchSnackbar({
 
   return (
     <div>
-      <Box display="flex" alignItems="center" justifyContent="left">
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="left"
+        sx={{ m: 0.5 }}
+      >
         <IconButton aria-label="refresh" onClick={handleClick}>
           <RefreshIcon />
         </IconButton>
         <Typography component="span">{title}</Typography>
       </Box>
+      <Box display="flex" alignItems="left" justifyContent="left">
+        <SelectFilter fetchHandler={fetchHandler}></SelectFilter>
+      </Box>
+
       <Snackbar
         open={open}
         autoHideDuration={3000}
         onClose={handleClose}
-        message="Data fetched"
+        message="Données mises à jour!"
         action={action}
         ContentProps={{
           style: { backgroundColor: 'green' },

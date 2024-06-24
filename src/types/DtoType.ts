@@ -1,12 +1,12 @@
 export type PlaceDto = {
-  place_id: number;
-  place_name: string;
-  place_type: string;
+  place_id: number | undefined;
+  place_name: string | undefined;
+  place_type: string | undefined;
 };
 
 export type ItemDto = {
-  item_id: number;
-  item_name: string;
-  nb_of_items: number;
-  place_id: number;
+  item_id: number | undefined;
+  item_name: string | undefined;
+  nb_of_items: number | undefined;
+  place_id: number | undefined;
 };
