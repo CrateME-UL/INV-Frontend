@@ -1,3 +1,5 @@
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef, frFR } from '@mui/x-data-grid';
 
 type CustomDataGridProps<T> = {
@@ -15,7 +17,14 @@ export const CustomDataGrid = <T,>({
   return (
     <>
       {error ? (
-        <p>{error}</p>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="left"
+          sx={{ m: 1.5 }}
+        >
+          <Typography component="span">{error}</Typography>
+        </Box>
       ) : (
         <div>
           <DataGrid
