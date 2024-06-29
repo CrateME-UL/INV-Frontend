@@ -1,12 +1,9 @@
 import * as React from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { getResponse } from '../API';
 import { PlaceDto } from '../types/DtoType';
 import { buildPlace } from '../factories/PlaceFactory';
 import { Place } from '../models/Place';
+import { Autocomplete, TextField, Box } from '@mui/material';
 
 export default function SelectLabels({
   fetchHandler,
@@ -15,11 +12,6 @@ export default function SelectLabels({
 }) {
   const [itemName, setItemName] = React.useState('');
   const [places, setPlaces] = React.useState<Place[]>([]);
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setItemName(event.target.value);
-    fetchHandler(event.target.value);
-  };
 
   const handleFetchPlaces = async (path: string) => {
     try {
@@ -37,28 +29,28 @@ export default function SelectLabels({
   }, []);
 
   return (
-    <div style={{ width: '100%', alignContent: 'flex-start' }}>
-      <FormControl fullWidth={true}>
-        <InputLabel id="demo-simple-select-helper-label">
-          Lieu
-        </InputLabel>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          value={itemName}
-          label="Age"
-          onChange={handleChange}
-        >
-          <MenuItem value="Tous">
-            <em>Tous</em>
-          </MenuItem>
-          {places.map((place) => (
-            <MenuItem key={place.placeId} value={place.placeName}>
-              {place.placeName}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+    <Box sx={{ width: '100%', alignContent: 'flex-start' }}>
+      <Autocomplete
+        id="combo-box-demo"
+        options={places}
+        getOptionLabel={(option) => option.placeName}
+        value={
+          places.find((place) => place.placeName === itemName) || null
+        }
+        onChange={(_event, newValue) => {
+          setItemName(newValue ? newValue.placeName : '');
+          fetchHandler(newValue ? newValue.placeName : '');
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Lieu"
+            placeholder="Choisissez un lieu"
+          />
+        )}
+        noOptionsText="Aucune option"
+        fullWidth
+      />
+    </Box>
   );
 }
