@@ -48,7 +48,7 @@ const Places = () => {
   const { places, error, itemsName } = state;
 
   const columns: GridColDef[] = [
-    { field: 'placeName', headerName: 'Lieu', width: 260 },
+    { field: 'placeName', headerName: 'Lieux', width: 260 },
   ];
 
   const handleFetchItems = async (
