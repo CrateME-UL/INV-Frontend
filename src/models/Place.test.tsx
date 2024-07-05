@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PlaceDto } from '../types/DtoType';
-import { Place } from './Place';
+import { Place, PlaceDto } from './Place';
 import { NO_DATA_MESSAGE } from '../constants';
 
 describe('Place Class', () => {

@@ -2,54 +2,53 @@ import * as React from 'react';
 import { getResponse } from '../API';
 import { CustomDataGrid } from '../components/CustomDataGrid';
 import { GridColDef } from '@mui/x-data-grid';
-import { Item, ItemDto, buildItem } from '../models/Item';
+import { Place, PlaceDto, buildPlace } from '../models/Place';
 import SelectFilter from '../components/SelectFilter';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 interface InventoryState {
-  items: Item[];
+  places: Place[];
   error: string | null;
-  placeName: string;
+  itemsName: string;
 }
 
 type InventoryAction =
-  | { type: 'SET_ITEMS'; payload: Item[] }
+  | { type: 'SET_PLACES'; payload: Place[] }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SET_PLACE_NAME'; payload: string };
+  | { type: 'SET_ITEM_NAME'; payload: string };
 
 const initialState: InventoryState = {
-  items: [],
+  places: [],
   error: null,
-  placeName: '',
+  itemsName: '',
 };
 
-const inventoryReducer = (
+const placeReducer = (
   state: InventoryState,
   action: InventoryAction
 ): InventoryState => {
   switch (action.type) {
-    case 'SET_ITEMS':
-      return { ...state, items: action.payload };
+    case 'SET_PLACES':
+      return { ...state, places: action.payload };
     case 'SET_ERROR':
       return { ...state, error: action.payload };
-    case 'SET_PLACE_NAME':
-      return { ...state, placeName: action.payload };
+    case 'SET_ITEM_NAME':
+      return { ...state, itemsName: action.payload };
     default:
       return state;
   }
 };
 
-const ItemInventory = () => {
+const Places = () => {
   const [state, dispatch] = React.useReducer(
-    inventoryReducer,
+    placeReducer,
     initialState
   );
-  const { items, error, placeName } = state;
+  const { places, error, itemsName } = state;
 
   const columns: GridColDef[] = [
-    { field: 'nbOfItems', headerName: 'Qte', width: 90 },
-    { field: 'itemName', headerName: "Type d'objet", width: 260 },
+    { field: 'placeName', headerName: 'Lieu', width: 260 },
   ];
 
   const handleFetchItems = async (
@@ -57,7 +56,7 @@ const ItemInventory = () => {
     filter: { [key: string]: string } | undefined
   ) => {
     try {
-      const resultDto = await getResponse<ItemDto[]>(path, filter);
+      const resultDto = await getResponse<PlaceDto[]>(path, filter);
       if (resultDto instanceof Error) {
         dispatch({
           type: 'SET_ERROR',
@@ -65,8 +64,9 @@ const ItemInventory = () => {
             'Oopsie...Vérifier la connexion Internet et rafraîchir la page.',
         });
       } else {
-        const items = resultDto.map(buildItem);
-        dispatch({ type: 'SET_ITEMS', payload: items });
+        console.log(resultDto);
+        const places = resultDto.map(buildPlace);
+        dispatch({ type: 'SET_PLACES', payload: places });
       }
     } catch {
       dispatch({
@@ -77,11 +77,8 @@ const ItemInventory = () => {
   };
 
   React.useEffect(() => {
-    const filters = {
-      place_name: placeName === 'Tous' ? '' : placeName,
-    };
-    handleFetchItems('items', filters);
-  }, [placeName]);
+    handleFetchItems('places', undefined);
+  }, []);
 
   return (
     <>
@@ -91,14 +88,14 @@ const ItemInventory = () => {
         justifyContent="left"
         sx={{ m: 1.5 }}
       >
-        <Typography component="span">Inventaire</Typography>
+        <Typography component="span">Inventaire par </Typography>
       </Box>
       <Box display="flex" alignItems="left" justifyContent="left">
         <SelectFilter
-          label="Lieu"
+          label="Type d'objet"
           fetchHandler={(value) =>
             dispatch({
-              type: 'SET_PLACE_NAME',
+              type: 'SET_ITEM_NAME',
               payload: value as string,
             })
           }
@@ -106,12 +103,12 @@ const ItemInventory = () => {
       </Box>
       <CustomDataGrid
         columns={columns}
-        rows={items}
+        rows={places}
         error={error}
-        getRowId={(item: Item) => item.itemId}
+        getRowId={(place: Place) => place.placeId}
       ></CustomDataGrid>
     </>
   );
 };
 
-export default ItemInventory;
+export default Places;

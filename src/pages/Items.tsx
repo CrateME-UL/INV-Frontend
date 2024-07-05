@@ -65,7 +65,9 @@ const ItemInventory = () => {
             'Oopsie...Vérifier la connexion Internet et rafraîchir la page.',
         });
       } else {
+        console.log(resultDto);
         const items = resultDto.map(buildItem);
+        console.log(items);
         dispatch({ type: 'SET_ITEMS', payload: items });
       }
     } catch {

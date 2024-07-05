@@ -1,5 +1,14 @@
 import { NO_DATA_MESSAGE } from '../constants';
-import { PlaceDto } from '../types/DtoType';
+
+export type PlaceDto = {
+  place_id: number | undefined;
+  place_name: string | undefined;
+  place_type: string | undefined;
+};
+
+export const buildPlace = (place: PlaceDto): Place => {
+  return new Place(place);
+};
 
 export class Place {
   placeId: number | string;

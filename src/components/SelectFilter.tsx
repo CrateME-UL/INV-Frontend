@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { getResponse } from '../API';
-import { PlaceDto } from '../types/DtoType';
-import { buildPlace } from '../factories/PlaceFactory';
-import { Place } from '../models/Place';
+import { Place, PlaceDto, buildPlace } from '../models/Place';
 import { Autocomplete, TextField, Box } from '@mui/material';
 
 export default function SelectLabels({
   fetchHandler,
+  label,
 }: {
   fetchHandler: React.Dispatch<React.SetStateAction<string>>;
+  label: string;
 }) {
   const [itemName, setItemName] = React.useState('');
   const [places, setPlaces] = React.useState<Place[]>([]);
@@ -44,8 +44,8 @@ export default function SelectLabels({
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Lieu"
-            placeholder="Choisissez un lieu"
+            label={label}
+            placeholder={`Choisissez un ${label}`}
           />
         )}
         noOptionsText="Aucune option"

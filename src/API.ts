@@ -12,7 +12,9 @@ export const getResponse = async <T>(
       `${API_ENDPOINT}/${path}`,
       params ? { params } : undefined
     );
+    console.log(result.data);
     return result.data;
+    
   } catch {
     return new Error('Failed to fetch data');
   }

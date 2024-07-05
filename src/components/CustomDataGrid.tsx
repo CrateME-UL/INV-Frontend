@@ -4,13 +4,13 @@ import { DataGrid, GridColDef, frFR } from '@mui/x-data-grid';
 
 type CustomDataGridProps<T> = {
   error: string | null;
-  items: T[];
+  rows: T[];
   columns: GridColDef[];
   getRowId: (row: T) => string | number;
 };
 export const CustomDataGrid = <T,>({
   error,
-  items,
+  rows,
   columns,
   getRowId,
 }: CustomDataGridProps<T>) => {
@@ -28,7 +28,7 @@ export const CustomDataGrid = <T,>({
       ) : (
         <div>
           <DataGrid
-            rows={items}
+            rows={rows}
             columns={columns}
             getRowId={getRowId}
             initialState={{

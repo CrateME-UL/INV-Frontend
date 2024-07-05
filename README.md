@@ -84,12 +84,18 @@ https://sass-lang.com/guide/
 sass --watch styles.module.scss styles.module.css
 ```
 
+## to setup the router
+```bash
+npm install react-router-dom
+```
+
 ## to run the App (in inventaire dir)
 
 ```bash
 npm install
 npm run dev
 ```
+
 
 ## to run lint/prettier: save file
 

@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ItemDto } from '../types/DtoType';
-import { Item } from './Item';
+import { Item, ItemDto } from './Item';
 import { NO_DATA_MESSAGE } from '../constants';
 
 describe('Item Class', () => {

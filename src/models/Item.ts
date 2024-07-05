@@ -1,11 +1,19 @@
 import { NO_DATA_MESSAGE } from '../constants';
-import { ItemDto } from '../types/DtoType';
+
+export type ItemDto = {
+  item_id: number | undefined;
+  item_name: string | undefined;
+  nb_of_items: number | undefined;
+};
+
+export const buildItem = (item: ItemDto): Item => {
+  return new Item(item);
+};
 
 export class Item {
   itemId: number | string;
   itemName: string;
   nbOfItems: number | string;
-  placeId: number | string;
 
   constructor(item: ItemDto) {
     this.itemId = item.item_id || NO_DATA_MESSAGE;
@@ -16,6 +24,5 @@ export class Item {
           ? item.nb_of_items
           : NO_DATA_MESSAGE
         : NO_DATA_MESSAGE;
-    this.placeId = item.place_id || NO_DATA_MESSAGE;
   }
 }
