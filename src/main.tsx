@@ -12,29 +12,29 @@ import {
 } from 'react-router-dom';
 import Navbar from './components/Navbar.tsx';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <ItemInventory />,
-    errorElement: <ErrorPage />,
-  },
+// const router = createBrowserRouter([
+//   {
+//     path: '/',
+//     element: <ItemInventory />,
+//     errorElement: <ErrorPage />,
+//   },
 
-  {
-    path: 'items',
-    element: <Items />,
-  },
+//   {
+//     path: 'items',
+//     element: <Items />,
+//   },
 
-  {
-    path: 'places',
-    element: <Places />,
-  },
-]);
+//   {
+//     path: 'places',
+//     element: <Places />,
+//   },
+// ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     {/* <App /> */}
 
-    <RouterProvider router={router} />
+    {/* <RouterProvider router={router} /> */}
     <Navbar />
   </React.StrictMode>
 );
