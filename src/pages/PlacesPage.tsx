@@ -3,25 +3,29 @@ import { getResponse } from '../API';
 import { CustomDataGrid } from '../components/CustomDataGrid';
 import { GridColDef } from '@mui/x-data-grid';
 import { Place, PlaceDto, buildPlace } from '../models/Place';
-import SelectFilter from '../components/SelectFilter';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { buildItem, Item, ItemDto } from '../models/Item';
+import { SelectFilter } from '../components/SelectFilter';
 
 interface InventoryState {
   places: Place[];
+  items: Item[];
   error: string | null;
-  itemsName: string;
+  itemsFilter: string;
 }
 
 type InventoryAction =
   | { type: 'SET_PLACES'; payload: Place[] }
+  | { type: 'SET_ITEMS'; payload: Item[] }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SET_ITEM_NAME'; payload: string };
+  | { type: 'SET_ITEMS_FILTER'; payload: string };
 
 const initialState: InventoryState = {
   places: [],
+  items: [],
   error: null,
-  itemsName: '',
+  itemsFilter: '',
 };
 
 const placeReducer = (
@@ -31,27 +35,54 @@ const placeReducer = (
   switch (action.type) {
     case 'SET_PLACES':
       return { ...state, places: action.payload };
+    case 'SET_ITEMS':
+      return { ...state, items: action.payload };
     case 'SET_ERROR':
       return { ...state, error: action.payload };
-    case 'SET_ITEM_NAME':
-      return { ...state, itemsName: action.payload };
+    case 'SET_ITEMS_FILTER':
+      return { ...state, itemsFilter: action.payload };
     default:
       return state;
   }
 };
 
-const Places = () => {
+export const PlacesPage = () => {
   const [state, dispatch] = React.useReducer(
     placeReducer,
     initialState
   );
-  const { places, error, itemsName } = state;
+  const { places, items, error, itemsFilter } = state;
 
   const columns: GridColDef[] = [
     { field: 'placeName', headerName: 'Lieux', width: 260 },
   ];
 
-  const handleFetchItems = async (
+  const handleFetchItems = async (path: string) => {
+    try {
+      const resultDto = await getResponse<ItemDto[]>(path, undefined);
+      if (resultDto instanceof Error) {
+        dispatch({
+          type: 'SET_ERROR',
+          payload:
+            'Oopsie...Vérifier la connexion Internet et rafraîchir la page.',
+        });
+      } else {
+        const items = resultDto.map(buildItem);
+        dispatch({ type: 'SET_ITEMS', payload: items });
+      }
+    } catch {
+      dispatch({
+        type: 'SET_ERROR',
+        payload: 'Something went wrong...',
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    handleFetchItems('items');
+  }, []);
+
+  const handleFetchPlaces = async (
     path: string,
     filter: { [key: string]: string } | undefined
   ) => {
@@ -64,7 +95,6 @@ const Places = () => {
             'Oopsie...Vérifier la connexion Internet et rafraîchir la page.',
         });
       } else {
-        console.log(resultDto);
         const places = resultDto.map(buildPlace);
         dispatch({ type: 'SET_PLACES', payload: places });
       }
@@ -77,8 +107,11 @@ const Places = () => {
   };
 
   React.useEffect(() => {
-    handleFetchItems('places', undefined);
-  }, []);
+    const filters = {
+      place_name: itemsFilter === 'Tous' ? '' : itemsFilter,
+    };
+    handleFetchPlaces('places', filters);
+  }, [itemsFilter]);
 
   return (
     <>
@@ -88,14 +121,16 @@ const Places = () => {
         justifyContent="left"
         sx={{ m: 1.5 }}
       >
-        <Typography component="span">Inventaire par </Typography>
+        <Typography component="span">Inventaire</Typography>
       </Box>
       <Box display="flex" alignItems="left" justifyContent="left">
         <SelectFilter
           label="Type d'objet"
-          fetchHandler={(value) =>
+          options={items}
+          optionLabelHandler={(option) => option.itemName}
+          onChangeHandler={(value) =>
             dispatch({
-              type: 'SET_ITEM_NAME',
+              type: 'SET_ITEMS_FILTER',
               payload: value as string,
             })
           }
@@ -110,5 +145,3 @@ const Places = () => {
     </>
   );
 };
-
-export default Places;

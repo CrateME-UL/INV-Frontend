@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef, frFR } from '@mui/x-data-grid';
 
-type CustomDataGridProps<T> = {
+type DataGridProps<T> = {
   error: string | null;
   rows: T[];
   columns: GridColDef[];
@@ -13,7 +13,7 @@ export const CustomDataGrid = <T,>({
   rows,
   columns,
   getRowId,
-}: CustomDataGridProps<T>) => {
+}: DataGridProps<T>) => {
   return (
     <>
       {error ? (

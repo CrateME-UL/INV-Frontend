@@ -3,54 +3,88 @@ import { getResponse } from '../API';
 import { CustomDataGrid } from '../components/CustomDataGrid';
 import { GridColDef } from '@mui/x-data-grid';
 import { Item, ItemDto, buildItem } from '../models/Item';
-import SelectFilter from '../components/SelectFilter';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { buildPlace, Place, PlaceDto } from '../models/Place';
+import { SelectFilter } from '../components/SelectFilter';
 
 interface InventoryState {
   items: Item[];
+  places: Place[];
   error: string | null;
   placeName: string;
 }
 
 type InventoryAction =
   | { type: 'SET_ITEMS'; payload: Item[] }
+  | { type: 'SET_PLACES'; payload: Place[] }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SET_PLACE_NAME'; payload: string };
+  | { type: 'SET_PLACE_FILTER'; payload: string };
 
 const initialState: InventoryState = {
   items: [],
+  places: [],
   error: null,
   placeName: '',
 };
 
-const inventoryReducer = (
+const itemsReducer = (
   state: InventoryState,
   action: InventoryAction
 ): InventoryState => {
   switch (action.type) {
     case 'SET_ITEMS':
       return { ...state, items: action.payload };
+    case 'SET_PLACES':
+      return { ...state, places: action.payload };
     case 'SET_ERROR':
       return { ...state, error: action.payload };
-    case 'SET_PLACE_NAME':
+    case 'SET_PLACE_FILTER':
       return { ...state, placeName: action.payload };
     default:
       return state;
   }
 };
 
-const ItemInventory = () => {
+export const ItemsPage = () => {
   const [state, dispatch] = React.useReducer(
-    inventoryReducer,
+    itemsReducer,
     initialState
   );
-  const { items, error, placeName } = state;
+  const { items, places, error, placeName } = state;
 
   const columns: GridColDef[] = [
     { field: 'nbOfItems', headerName: 'Qte', width: 90 },
     { field: 'itemName', headerName: "Type d'objet", width: 260 },
   ];
+
+  const handleFetchPlaces = async (path: string) => {
+    try {
+      const resultDto = await getResponse<PlaceDto[]>(
+        path,
+        undefined
+      );
+      if (resultDto instanceof Error) {
+        dispatch({
+          type: 'SET_ERROR',
+          payload:
+            'Oopsie...Vérifier la connexion Internet et rafraîchir la page.',
+        });
+      } else {
+        const places = resultDto.map(buildPlace);
+        dispatch({ type: 'SET_PLACES', payload: places });
+      }
+    } catch {
+      dispatch({
+        type: 'SET_ERROR',
+        payload: 'Something went wrong...',
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    handleFetchPlaces('places');
+  }, []);
 
   const handleFetchItems = async (
     path: string,
@@ -96,9 +130,11 @@ const ItemInventory = () => {
       <Box display="flex" alignItems="left" justifyContent="left">
         <SelectFilter
           label="Lieu"
-          fetchHandler={(value) =>
+          options={places}
+          optionLabelHandler={(option) => option.placeName}
+          onChangeHandler={(value) =>
             dispatch({
-              type: 'SET_PLACE_NAME',
+              type: 'SET_PLACE_FILTER',
               payload: value as string,
             })
           }
@@ -113,5 +149,3 @@ const ItemInventory = () => {
     </>
   );
 };
-
-export default ItemInventory;
