@@ -80,27 +80,27 @@ https://sass-lang.com/guide/
 
 ## run this commmand in the styles folder in another terminal to autocompile css from change scss (install sass on computer)
 
-```console
+```bash
 sass --watch styles.module.scss styles.module.css
 ```
 
-## to setup the router
+## run the test server in another terminal
+
 ```bash
-npm install react-router-dom
+npm run test
 ```
 
-## to run the App (in inventaire dir)
+## to run the app server in another terminal
 
 ```bash
 npm install
 npm run dev
 ```
 
-
 ## to run lint/prettier: save file
 
 ## to build the docker image:
 
-```
+```bash
 docker build -t inv-ui .
 ```

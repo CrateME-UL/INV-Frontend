@@ -20,30 +20,35 @@ const RouterComponent = () => {
   const location = useLocation();
 
   React.useEffect(() => {
-    const selectedLinks = document.querySelectorAll('.Mui-selected');
-    selectedLinks.forEach((link) => {
-      link.classList.remove('Mui-selected');
-    });
-    let pageTitle = location.pathname.replace('/', '').toUpperCase();
-    switch (location.pathname.replace('/', '').toUpperCase()) {
-      case 'ITEMS':
-        pageTitle = 'Objets';
-        document
-          .getElementById('itemsLink')
-          ?.classList.add('Mui-selected');
-        break;
-      case 'PLACES':
-        pageTitle = 'Lieux';
-        document
-          .getElementById('placesLink')
-          ?.classList.add('Mui-selected');
-        break;
-      default:
-        pageTitle = '404';
+    if (typeof document !== 'undefined') {
+      const selectedLinks =
+        document.querySelectorAll('.Mui-selected');
+      selectedLinks.forEach((link) => {
+        link.classList.remove('Mui-selected');
+      });
+      let pageTitle = location.pathname
+        .replace('/', '')
+        .toUpperCase();
+      switch (location.pathname.replace('/', '').toUpperCase()) {
+        case 'ITEMS':
+          pageTitle = 'Objets';
+          document
+            .getElementById('itemsLink')
+            ?.classList.add('Mui-selected');
+          break;
+        case 'PLACES':
+          pageTitle = 'Lieux';
+          document
+            .getElementById('placesLink')
+            ?.classList.add('Mui-selected');
+          break;
+        default:
+          pageTitle = '404';
+      }
+      document.title = pageTitle
+        ? `${pageTitle} | Crate ME!`
+        : 'Crate ME!';
     }
-    document.title = pageTitle
-      ? `${pageTitle} | Crate ME!`
-      : 'Crate ME!';
   }, [location.pathname]);
 
   return (

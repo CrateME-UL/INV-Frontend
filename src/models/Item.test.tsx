@@ -7,12 +7,10 @@ describe('Item Class', () => {
     const expectedItemId = 1;
     const expectedItemName = 'Item A';
     const expectedNbOfItems = 10;
-    const expectedPlaceId = 2;
     const input: ItemDto = {
       item_id: expectedItemId,
       item_name: expectedItemName,
       nb_of_items: expectedNbOfItems,
-      place_id: expectedPlaceId,
     };
     const item = new Item(input);
 
@@ -27,22 +25,16 @@ describe('Item Class', () => {
     it('should initialize with expected number of items', () => {
       expect(item.nbOfItems).toBe(expectedNbOfItems);
     });
-
-    it('should initialize with expected place id', () => {
-      expect(item.placeId).toBe(expectedPlaceId);
-    });
   });
 
   describe('Item with zero items', () => {
     const expectedItemId = 1;
     const expectedItemName = 'Item A';
     const expectedNbOfItems = 0;
-    const expectedPlaceId = 2;
     const input: ItemDto = {
       item_id: expectedItemId,
       item_name: expectedItemName,
       nb_of_items: expectedNbOfItems,
-      place_id: expectedPlaceId,
     };
     const item = new Item(input);
 
@@ -55,13 +47,11 @@ describe('Item Class', () => {
     const expectedItemId = 1;
     const expectedItemName = 'Item A';
     const expectedNbOfItems = -1;
-    const expectedPlaceId = 2;
     const expectedValue = NO_DATA_MESSAGE;
     const input: ItemDto = {
       item_id: expectedItemId,
       item_name: expectedItemName,
       nb_of_items: expectedNbOfItems,
-      place_id: expectedPlaceId,
     };
     const item = new Item(input);
 
@@ -76,7 +66,6 @@ describe('Item Class', () => {
       item_id: undefined,
       item_name: undefined,
       nb_of_items: undefined,
-      place_id: undefined,
     };
     const item = new Item(input);
 
@@ -90,10 +79,6 @@ describe('Item Class', () => {
 
     it('should initialize with expected NO_DATA_MESSAGE for number of items', () => {
       expect(item.nbOfItems).toBe(expectedValue);
-    });
-
-    it('should initialize with expected NO_DATA_MESSAGE for place id', () => {
-      expect(item.placeId).toBe(expectedValue);
     });
   });
 });
