@@ -2,21 +2,25 @@ import * as React from 'react';
 import { getResponse } from '../API';
 import { CustomDataGrid } from '../components/CustomDataGrid';
 import { GridColDef } from '@mui/x-data-grid';
-import { Place, PlaceDto, buildPlace } from '../models/Place';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { buildItem, Item, ItemDto } from '../models/Item';
 import { SelectFilter } from '../components/SelectFilter';
+import {
+  buildInventoryPlace,
+  InventoryPlace,
+  InventoryPlaceDto,
+} from '../models/InventoryPlace';
 
 interface InventoryState {
-  places: Place[];
+  places: InventoryPlace[];
   items: Item[];
   error: string | null;
   itemsFilter: string;
 }
 
 type InventoryAction =
-  | { type: 'SET_PLACES'; payload: Place[] }
+  | { type: 'SET_PLACES'; payload: InventoryPlace[] }
   | { type: 'SET_ITEMS'; payload: Item[] }
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'SET_ITEMS_FILTER'; payload: string };
@@ -55,6 +59,7 @@ export const PlacesPage = () => {
 
   const columns: GridColDef[] = [
     { field: 'placeName', headerName: 'Lieux', width: 260 },
+    { field: 'nbOfItems', headerName: 'Qte', width: 90 },
   ];
 
   const handleFetchItems = async (path: string) => {
@@ -87,7 +92,10 @@ export const PlacesPage = () => {
     filter: { [key: string]: string } | undefined
   ) => {
     try {
-      const resultDto = await getResponse<PlaceDto[]>(path, filter);
+      const resultDto = await getResponse<InventoryPlaceDto[]>(
+        path,
+        filter
+      );
       if (resultDto instanceof Error) {
         dispatch({
           type: 'SET_ERROR',
@@ -95,7 +103,7 @@ export const PlacesPage = () => {
             'Oopsie...Vérifier la connexion Internet et rafraîchir la page.',
         });
       } else {
-        const places = resultDto.map(buildPlace);
+        const places = resultDto.map(buildInventoryPlace);
         dispatch({ type: 'SET_PLACES', payload: places });
       }
     } catch {
@@ -110,7 +118,11 @@ export const PlacesPage = () => {
     const filters = {
       place_name: itemsFilter === 'Tous' ? '' : itemsFilter,
     };
-    handleFetchPlaces('places', filters);
+    if (itemsFilter === 'Tous') {
+      handleFetchPlaces('inventory/places', undefined);
+      return;
+    }
+    handleFetchPlaces('inventory/places', filters);
   }, [itemsFilter]);
 
   return (
@@ -140,7 +152,7 @@ export const PlacesPage = () => {
         columns={columns}
         rows={places}
         error={error}
-        getRowId={(place: Place) => place.placeId}
+        getRowId={(place: InventoryPlace) => place.placeId}
       ></CustomDataGrid>
     </>
   );

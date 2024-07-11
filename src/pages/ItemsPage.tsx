@@ -2,21 +2,25 @@ import * as React from 'react';
 import { getResponse } from '../API';
 import { CustomDataGrid } from '../components/CustomDataGrid';
 import { GridColDef } from '@mui/x-data-grid';
-import { Item, ItemDto, buildItem } from '../models/Item';
+import {
+  InventoryItem,
+  InventoryItemDto,
+  buildInventoryItem,
+} from '../models/InventoryItem';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { buildPlace, Place, PlaceDto } from '../models/Place';
 import { SelectFilter } from '../components/SelectFilter';
 
 interface InventoryState {
-  items: Item[];
+  items: InventoryItem[];
   places: Place[];
   error: string | null;
   placeName: string;
 }
 
 type InventoryAction =
-  | { type: 'SET_ITEMS'; payload: Item[] }
+  | { type: 'SET_ITEMS'; payload: InventoryItem[] }
   | { type: 'SET_PLACES'; payload: Place[] }
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'SET_PLACE_FILTER'; payload: string };
@@ -91,7 +95,10 @@ export const ItemsPage = () => {
     filter: { [key: string]: string } | undefined
   ) => {
     try {
-      const resultDto = await getResponse<ItemDto[]>(path, filter);
+      const resultDto = await getResponse<InventoryItemDto[]>(
+        path,
+        filter
+      );
       if (resultDto instanceof Error) {
         dispatch({
           type: 'SET_ERROR',
@@ -99,7 +106,7 @@ export const ItemsPage = () => {
             'Oopsie...Vérifier la connexion Internet et rafraîchir la page.',
         });
       } else {
-        const items = resultDto.map(buildItem);
+        const items = resultDto.map(buildInventoryItem);
         dispatch({ type: 'SET_ITEMS', payload: items });
       }
     } catch {
@@ -114,7 +121,11 @@ export const ItemsPage = () => {
     const filters = {
       place_name: placeName === 'Tous' ? '' : placeName,
     };
-    handleFetchItems('items', filters);
+    if (placeName === 'Tous') {
+      handleFetchItems('inventory/items', undefined);
+      return;
+    }
+    handleFetchItems('inventory/items', filters);
   }, [placeName]);
 
   return (
@@ -144,7 +155,7 @@ export const ItemsPage = () => {
         columns={columns}
         rows={items}
         error={error}
-        getRowId={(item: Item) => item.itemId}
+        getRowId={(item: InventoryItem) => item.itemId}
       ></CustomDataGrid>
     </>
   );
