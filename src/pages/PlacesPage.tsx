@@ -116,7 +116,7 @@ export const PlacesPage = () => {
 
   React.useEffect(() => {
     const filters = {
-      place_name: itemsFilter === 'Tous' ? '' : itemsFilter,
+      item_name: itemsFilter === 'Tous' ? '' : itemsFilter,
     };
     if (itemsFilter === 'Tous') {
       handleFetchPlaces('inventory/places', undefined);
