@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:22.4-bullseye-slim
 
 WORKDIR /app
 
@@ -9,7 +9,3 @@ RUN npm ci
 COPY . .
 
 RUN npm run build
-
-EXPOSE 8080
-
-CMD [ "npm", "run", "preview" ]

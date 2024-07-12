@@ -80,11 +80,17 @@ https://sass-lang.com/guide/
 
 ## run this commmand in the styles folder in another terminal to autocompile css from change scss (install sass on computer)
 
-```console
+```bash
 sass --watch styles.module.scss styles.module.css
 ```
 
-## to run the App (in inventaire dir)
+## run the test server in another terminal
+
+```bash
+npm run test
+```
+
+## to run the app server in another terminal
 
 ```bash
 npm install
@@ -95,6 +101,6 @@ npm run dev
 
 ## to build the docker image:
 
-```
+```bash
 docker build -t inv-ui .
 ```

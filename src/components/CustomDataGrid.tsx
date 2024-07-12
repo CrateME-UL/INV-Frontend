@@ -1,25 +1,34 @@
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { DataGrid, GridColDef, frFR } from '@mui/x-data-grid';
 
-type CustomDataGridProps<T> = {
+type DataGridProps<T> = {
   error: string | null;
-  items: T[];
+  rows: T[];
   columns: GridColDef[];
   getRowId: (row: T) => string | number;
 };
 export const CustomDataGrid = <T,>({
   error,
-  items,
+  rows,
   columns,
   getRowId,
-}: CustomDataGridProps<T>) => {
+}: DataGridProps<T>) => {
   return (
     <>
       {error ? (
-        <p>{error}</p>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="left"
+          sx={{ m: 1.5 }}
+        >
+          <Typography component="span">{error}</Typography>
+        </Box>
       ) : (
         <div>
           <DataGrid
-            rows={items}
+            rows={rows}
             columns={columns}
             getRowId={getRowId}
             initialState={{
@@ -29,6 +38,9 @@ export const CustomDataGrid = <T,>({
             }}
             disableColumnMenu
             pageSizeOptions={[5, 10]}
+            localeText={
+              frFR.components.MuiDataGrid.defaultProps.localeText
+            }
           />
         </div>
       )}
