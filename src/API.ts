@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const API_ENDPOINT =
-  import.meta.env.VITE_API_ENDPOINT || 'http://localhost:3000';
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT.replace(
+  /\/?$/,
+  '/'
+);
 
 export const getResponse = async <T>(
   path: string,
