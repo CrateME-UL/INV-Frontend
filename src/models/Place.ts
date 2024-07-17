@@ -47,7 +47,7 @@ export class Place {
       case 'IN':
         return '#FFB6C1';
       default:
-        return 'gray';
+        return '#A9A9A9';
     }
   }
 }
