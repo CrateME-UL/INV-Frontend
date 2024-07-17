@@ -11,6 +11,7 @@ import {
   InventoryPlace,
   InventoryPlaceDto,
 } from '../models/InventoryPlace';
+import Chip from '@mui/material/Chip';
 
 interface InventoryState {
   places: InventoryPlace[];
@@ -58,8 +59,34 @@ export const PlacesPage = () => {
   const { places, items, error, itemsFilter } = state;
 
   const columns: GridColDef[] = [
-    { field: 'placeName', headerName: 'Lieux', width: 260 },
-    { field: 'nbOfItems', headerName: 'Qte', width: 90 },
+    { field: 'nbOfItems', headerName: 'Qte', width: 80 },
+    {
+      field: 'placeName',
+      headerName: 'Lieux',
+      width: 270,
+      renderCell: (params) => {
+        const place = params.row as InventoryPlace;
+        return (
+          <Box display="flex" alignItems="center">
+            {place.placeType && (
+              <Chip
+                label={place.placeTypeFrench}
+                size="small"
+                sx={{
+                  mr: 0.5,
+                  backgroundColor: place.placeTypeColor,
+                  color: 'black',
+                  border: '1px solid black',
+                  height: '24px',
+                  width: '44px',
+                }}
+              />
+            )}
+            <Typography>{place.placeName}</Typography>
+          </Box>
+        );
+      },
+    },
   ];
 
   const handleFetchItems = async (path: string) => {
