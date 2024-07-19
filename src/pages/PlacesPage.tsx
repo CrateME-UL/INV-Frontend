@@ -12,6 +12,7 @@ import {
   InventoryPlaceDto,
 } from '../models/InventoryPlace';
 import Chip from '@mui/material/Chip';
+import ChipFilter from '../components/ChipFilter';
 
 interface InventoryState {
   places: InventoryPlace[];
@@ -152,15 +153,60 @@ export const PlacesPage = () => {
     handleFetchPlaces('inventory/places', filters);
   }, [itemsFilter]);
 
+  const placeTypes = ['INV', 'EXT', 'INT'];
+
+  const [selectedPlaceTypes, setSelectedPlaceTypes] =
+    React.useState<string[]>(placeTypes);
+
+  React.useEffect(() => {
+    const filters: { [key: string]: string } = {
+      item_name: itemsFilter === 'Tous' ? '' : itemsFilter,
+    };
+    if (selectedPlaceTypes.length > 0) {
+      filters.place_type = selectedPlaceTypes.join(',');
+    }
+    handleFetchPlaces('inventory/places', filters);
+  }, [itemsFilter, selectedPlaceTypes]);
+
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value, checked } = event.target;
+    setSelectedPlaceTypes((prev) =>
+      checked
+        ? [...prev, value]
+        : prev.filter((type) => type !== value)
+    );
+  };
+  const getPlaceTypeColor = (placeType: string): string => {
+    switch (placeType) {
+      case 'INV':
+        return '#D2B48C';
+      case 'EXT':
+        return '#98FB98';
+      case 'INT':
+        return '#FFB6C1';
+      default:
+        return '#A9A9A9';
+    }
+  };
+
   return (
     <>
       <Box
-        display="flex"
-        alignItems="center"
+        alignItems="left"
         justifyContent="left"
-        sx={{ m: 1.5 }}
+        sx={{ mb: 2, ml: 0.5 }}
       >
         <Typography component="span">Inventaire</Typography>
+      </Box>
+      <Box display="flex" alignItems="left" justifyContent="left">
+        <ChipFilter
+          chips={placeTypes}
+          selectedChips={selectedPlaceTypes}
+          handleCheckboxChange={handleCheckboxChange}
+          getChipColor={getPlaceTypeColor}
+        />
       </Box>
       <Box display="flex" alignItems="left" justifyContent="left">
         <SelectFilter
@@ -173,14 +219,14 @@ export const PlacesPage = () => {
               payload: value as string,
             })
           }
-        ></SelectFilter>
+        />
       </Box>
       <CustomDataGrid
         columns={columns}
         rows={places}
         error={error}
         getRowId={(place: InventoryPlace) => place.placeId}
-      ></CustomDataGrid>
+      />
     </>
   );
 };

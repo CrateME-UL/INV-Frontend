@@ -8,6 +8,7 @@ type DataGridProps<T> = {
   columns: GridColDef[];
   getRowId: (row: T) => string | number;
 };
+
 export const CustomDataGrid = <T,>({
   error,
   rows,
@@ -24,6 +25,15 @@ export const CustomDataGrid = <T,>({
           sx={{ m: 1.5 }}
         >
           <Typography component="span">{error}</Typography>
+        </Box>
+      ) : rows.length === 0 ? (
+        <Box
+          display="flex"
+          alignItems="left"
+          justifyContent="left"
+          sx={{ m: 1.5 }}
+        >
+          <Typography component="span">Aucun résultat.</Typography>
         </Box>
       ) : (
         <div>

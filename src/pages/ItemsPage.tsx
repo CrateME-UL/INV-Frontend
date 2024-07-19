@@ -12,28 +12,26 @@ import Typography from '@mui/material/Typography';
 import { buildPlace, Place, PlaceDto } from '../models/Place';
 import { SelectFilter } from '../components/SelectFilter';
 import Chip from '@mui/material/Chip';
+import ChipFilter from '../components/ChipFilter';
 
 interface InventoryState {
   items: InventoryItem[];
   places: Place[];
   error: string | null;
   placeName: string;
-  selectedPlace: Place | null;
 }
 
 type InventoryAction =
   | { type: 'SET_ITEMS'; payload: InventoryItem[] }
   | { type: 'SET_PLACES'; payload: Place[] }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SET_PLACE_FILTER'; payload: string }
-  | { type: 'SET_SELECTED_PLACE'; payload: Place | null };
+  | { type: 'SET_PLACE_FILTER'; payload: string };
 
 const initialState: InventoryState = {
   items: [],
   places: [],
   error: null,
   placeName: '',
-  selectedPlace: null,
 };
 
 const itemsReducer = (
@@ -49,8 +47,6 @@ const itemsReducer = (
       return { ...state, error: action.payload };
     case 'SET_PLACE_FILTER':
       return { ...state, placeName: action.payload };
-    case 'SET_SELECTED_PLACE':
-      return { ...state, selectedPlace: action.payload };
     default:
       return state;
   }
@@ -61,7 +57,7 @@ export const ItemsPage = () => {
     itemsReducer,
     initialState
   );
-  const { items, places, error, placeName, selectedPlace } = state;
+  const { items, places, error, placeName } = state;
 
   const columns: GridColDef[] = [
     { field: 'nbOfItems', headerName: 'Qte', width: 90 },
@@ -135,72 +131,50 @@ export const ItemsPage = () => {
   }, [placeName]);
 
   const optionLabelHandler = (option: Place) => option.placeName;
+  const placeTypes = ['INV', 'EXT', 'INT'];
+
+  const [selectedPlaceTypes, setSelectedPlaceTypes] =
+    React.useState<string[]>(placeTypes);
+
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value, checked } = event.target;
+    setSelectedPlaceTypes((prev) =>
+      checked
+        ? [...prev, value]
+        : prev.filter((type) => type !== value)
+    );
+  };
+  const getPlaceTypeColor = (placeType: string): string => {
+    switch (placeType) {
+      case 'INV':
+        return '#D2B48C';
+      case 'EXT':
+        return '#98FB98';
+      case 'INT':
+        return '#FFB6C1';
+      default:
+        return '#A9A9A9';
+    }
+  };
 
   return (
     <>
       <Box
-        display="flex"
-        alignItems="center"
+        alignItems="left"
         justifyContent="left"
-        sx={{ m: 1.5 }}
+        sx={{ mb: 2, ml: 0.5 }}
       >
-        <Typography component="span">
-          Type(s) de lieu(x): &nbsp;
-          {(!selectedPlace || selectedPlace.placeName === 'Tous') && (
-            <>
-              <Chip
-                label="INV"
-                size="small"
-                sx={{
-                  mr: 0.5,
-                  backgroundColor: '#D2B48C',
-                  color: 'black',
-                  border: '1px solid black',
-                  height: '24px',
-                  width: '44px',
-                }}
-              />
-              <Chip
-                label="EXT"
-                size="small"
-                sx={{
-                  mr: 0.5,
-                  backgroundColor: '#98FB98',
-                  color: 'black',
-                  border: '1px solid black',
-                  height: '24px',
-                  width: '44px',
-                }}
-              />
-              <Chip
-                label="INT"
-                size="small"
-                sx={{
-                  mr: 0.5,
-                  backgroundColor: '#FFB6C1',
-                  color: 'black',
-                  border: '1px solid black',
-                  height: '24px',
-                  width: '44px',
-                }}
-              />
-            </>
-          )}
-          {selectedPlace && selectedPlace.placeName !== 'Tous' && (
-            <Chip
-              label={selectedPlace.placeTypeFrench}
-              size="small"
-              sx={{
-                mr: 0.5,
-                backgroundColor: selectedPlace.placeTypeColor,
-                color: 'black',
-                border: '1px solid black',
-                height: '24px',
-                width: '44px',
-              }}
-            />
-          )}
-        </Typography>
+        <Typography component="span">Inventaire</Typography>
+      </Box>
+      <Box display="flex" alignItems="left" justifyContent="left">
+        <ChipFilter
+          chips={placeTypes}
+          selectedChips={selectedPlaceTypes}
+          handleCheckboxChange={handleCheckboxChange}
+          getChipColor={getPlaceTypeColor}
+        />
       </Box>
       <Box display="flex" alignItems="left" justifyContent="left">
         <SelectFilter
@@ -208,16 +182,9 @@ export const ItemsPage = () => {
           options={[{ placeName: 'Tous' } as Place, ...places]}
           optionLabelHandler={optionLabelHandler}
           onChangeHandler={(value) => {
-            const selected =
-              places.find((place) => place.placeName === value) ||
-              ({ placeName: 'Tous' } as Place);
             dispatch({
               type: 'SET_PLACE_FILTER',
               payload: value as string,
-            });
-            dispatch({
-              type: 'SET_SELECTED_PLACE',
-              payload: selected,
             });
           }}
           renderOption={(props, option) => (
