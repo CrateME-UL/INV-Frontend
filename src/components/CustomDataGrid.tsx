@@ -1,6 +1,9 @@
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef, frFR } from '@mui/x-data-grid';
+import CircularProgress from '@mui/material/CircularProgress';
+import Fade from '@mui/material/Fade';
 
 type DataGridProps<T> = {
   error: string | null;
@@ -11,49 +14,87 @@ type DataGridProps<T> = {
 
 export const CustomDataGrid = <T,>({
   error,
-  rows,
+  rows: initialRows,
   columns,
   getRowId,
 }: DataGridProps<T>) => {
+  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState<T[]>([]);
+
+  useEffect(() => {
+    setRows(initialRows);
+    setLoading(false);
+  }, [initialRows]);
+
   return (
-    <>
-      {error ? (
+    <Box
+      sx={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      {loading ? (
         <Box
           display="flex"
           alignItems="center"
-          justifyContent="left"
-          sx={{ m: 1.5 }}
+          justifyContent="center"
+          sx={{ flexGrow: 1, mt: 3 }}
         >
-          <Typography component="span">{error}</Typography>
-        </Box>
-      ) : rows.length === 0 ? (
-        <Box
-          display="flex"
-          alignItems="left"
-          justifyContent="left"
-          sx={{ m: 1.5 }}
-        >
-          <Typography component="span">Aucun résultat.</Typography>
+          <CircularProgress />
         </Box>
       ) : (
-        <div>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            getRowId={getRowId}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            disableColumnMenu
-            pageSizeOptions={[5, 10]}
-            localeText={
-              frFR.components.MuiDataGrid.defaultProps.localeText
-            }
-          />
-        </div>
+        <>
+          <Fade in={!loading && !!error} timeout={500}>
+            <Box
+              display={error ? 'flex' : 'none'}
+              alignItems="center"
+              justifyContent="left"
+              sx={{ m: 1.5 }}
+            >
+              <Typography component="span">{error}</Typography>
+            </Box>
+          </Fade>
+          <Fade
+            in={!loading && !error && rows.length === 0}
+            timeout={500}
+          >
+            <Box
+              display={!error && rows.length === 0 ? 'flex' : 'none'}
+              alignItems="left"
+              justifyContent="left"
+              sx={{ m: 1.5 }}
+            >
+              <Typography component="span">
+                Aucun résultat.
+              </Typography>
+            </Box>
+          </Fade>
+          <Fade
+            in={!loading && !error && rows.length > 0}
+            timeout={500}
+          >
+            <Box sx={{ flexGrow: 1 }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                getRowId={getRowId}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+                disableColumnMenu
+                pageSizeOptions={[5, 10]}
+                localeText={
+                  frFR.components.MuiDataGrid.defaultProps.localeText
+                }
+              />
+            </Box>
+          </Fade>
+        </>
       )}
-    </>
+    </Box>
   );
 };

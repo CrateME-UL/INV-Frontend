@@ -31,6 +31,7 @@ const ChipFilter: React.FC<ChipFilterProps> = ({
         padding: '10px',
         position: 'relative',
         width: '100%',
+        borderRadius: '4px',
       }}
     >
       <FormLabel

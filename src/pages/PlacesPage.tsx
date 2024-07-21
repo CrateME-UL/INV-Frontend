@@ -194,13 +194,11 @@ export const PlacesPage = () => {
   return (
     <>
       <Box
+        display="flex"
         alignItems="left"
         justifyContent="left"
-        sx={{ mb: 2, ml: 0.5 }}
+        sx={{ mb: 1, mt: 1 }}
       >
-        <Typography component="span">Inventaire</Typography>
-      </Box>
-      <Box display="flex" alignItems="left" justifyContent="left">
         <ChipFilter
           chips={placeTypes}
           selectedChips={selectedPlaceTypes}
@@ -208,7 +206,12 @@ export const PlacesPage = () => {
           getChipColor={getPlaceTypeColor}
         />
       </Box>
-      <Box display="flex" alignItems="left" justifyContent="left">
+      <Box
+        display="flex"
+        alignItems="left"
+        justifyContent="left"
+        sx={{ mb: 1 }}
+      >
         <SelectFilter
           label="Type d'objet"
           options={items}
