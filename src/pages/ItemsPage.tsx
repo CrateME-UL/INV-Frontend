@@ -118,23 +118,53 @@ export const ItemsPage = () => {
       });
     }
   };
-
-  React.useEffect(() => {
-    const filters = {
-      place_name: placeName === 'Tous' ? '' : placeName,
-    };
-    if (placeName === 'Tous') {
-      handleFetchItems('inventory/items', undefined);
-      return;
-    }
-    handleFetchItems('inventory/items', filters);
-  }, [placeName]);
-
   const optionLabelHandler = (option: Place) => option.placeName;
   const placeTypes = ['INV', 'EXT', 'INT'];
+  const translatePlaceType = (placeType: string) => {
+    switch (placeType) {
+      case 'INV':
+        return 'INV';
+      case 'EXT':
+        return 'OUT';
+      case 'INT':
+        return 'IN';
+      default:
+        return '';
+    }
+  };
 
   const [selectedPlaceTypes, setSelectedPlaceTypes] =
     React.useState<string[]>(placeTypes);
+
+  React.useEffect(() => {
+    const filters: { [key: string]: string } | undefined = {
+      place_name: '',
+      place_type: '',
+    };
+
+    if (placeName !== 'Tous' && placeName !== '') {
+      filters.place_name = placeName;
+    }
+
+    if (
+      selectedPlaceTypes.length > 0 &&
+      selectedPlaceTypes.length < 3
+    ) {
+      const chipFilters: string[] = [];
+      selectedPlaceTypes.forEach((type) => {
+        chipFilters.push(translatePlaceType(type));
+      });
+      filters.place_type = chipFilters.join(',');
+    }
+
+    Object.keys(filters).forEach((key) => {
+      if (filters[key] === '') {
+        delete filters[key];
+      }
+    });
+
+    handleFetchItems('inventory/items', filters);
+  }, [placeName, selectedPlaceTypes]);
 
   const handleCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>

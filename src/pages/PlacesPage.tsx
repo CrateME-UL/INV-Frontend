@@ -142,17 +142,6 @@ export const PlacesPage = () => {
     }
   };
 
-  React.useEffect(() => {
-    const filters = {
-      item_name: itemsFilter === 'Tous' ? '' : itemsFilter,
-    };
-    if (itemsFilter === 'Tous') {
-      handleFetchPlaces('inventory/places', undefined);
-      return;
-    }
-    handleFetchPlaces('inventory/places', filters);
-  }, [itemsFilter]);
-
   const placeTypes = ['INV', 'EXT', 'INT'];
 
   const [selectedPlaceTypes, setSelectedPlaceTypes] =
@@ -165,6 +154,7 @@ export const PlacesPage = () => {
     if (selectedPlaceTypes.length > 0) {
       filters.place_type = selectedPlaceTypes.join(',');
     }
+    console.log('filters', filters);
     handleFetchPlaces('inventory/places', filters);
   }, [itemsFilter, selectedPlaceTypes]);
 
