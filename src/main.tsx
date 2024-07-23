@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
@@ -28,7 +27,7 @@ if (rootElement) {
   // Create a root for React to render the application
   const root = ReactDOM.createRoot(rootElement);
 
-  // Render the Inventory component within React.StrictMode and ThemeProvider
+  // Render the Inventory component within React.StrictMode (for dev) and ThemeProvider
   root.render(
     // <React.StrictMode>
     <ThemeProvider theme={theme}>
