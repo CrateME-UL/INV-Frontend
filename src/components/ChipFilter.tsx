@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import FormLabel from '@mui/material/FormLabel';
 import Chip from '@mui/material/Chip';
-
+import Fade from '@mui/material/Fade';
 interface ChipFilterProps {
   chips: string[];
   selectedChips: string[];
@@ -14,6 +14,7 @@ interface ChipFilterProps {
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
   getChipColor: (Chip: string) => string;
+  showDeleteIcon: boolean;
 }
 
 const ChipFilter: React.FC<ChipFilterProps> = ({
@@ -21,6 +22,7 @@ const ChipFilter: React.FC<ChipFilterProps> = ({
   selectedChips,
   handleCheckboxChange,
   getChipColor,
+  showDeleteIcon,
 }) => {
   return (
     <Box
@@ -55,31 +57,57 @@ const ChipFilter: React.FC<ChipFilterProps> = ({
                     checked={selectedChips.includes(type)}
                     onChange={handleCheckboxChange}
                     value={type}
+                    disabled={!showDeleteIcon}
                     icon={
-                      <Chip
-                        label={type}
-                        size="small"
-                        sx={{
-                          backgroundColor: 'transparent',
-                          color: 'black',
-                          border: '1px solid black',
-                          height: '24px',
-                          width: '44px',
-                        }}
-                      />
+                      <Fade
+                        in={!selectedChips.includes(type)}
+                        timeout={300}
+                        exit={true}
+                      >
+                        <Chip
+                          label={type}
+                          size="small"
+                          sx={{
+                            backgroundColor: 'transparent',
+                            color: 'black',
+                            border: '1px solid black',
+                            height: '24px',
+                            width: '44px',
+                          }}
+                        />
+                      </Fade>
                     }
                     checkedIcon={
-                      <Chip
-                        label={type}
-                        size="small"
-                        sx={{
-                          backgroundColor: getChipColor(type),
-                          color: 'black',
-                          border: '1px solid black',
-                          height: '24px',
-                          width: '44px',
-                        }}
-                      />
+                      <Fade
+                        in={selectedChips.includes(type)}
+                        timeout={300}
+                        exit={true}
+                      >
+                        <Chip
+                          label={type}
+                          size="small"
+                          sx={{
+                            backgroundColor: getChipColor(type),
+                            color: 'black',
+                            border: '1px solid black',
+                            height: '24px',
+                            width: showDeleteIcon ? '64px' : '44px',
+                            '& .MuiChip-deleteIcon': {
+                              color: 'black',
+                              fontSize: '14px',
+                              cursor: 'pointer',
+                            },
+                          }}
+                          onDelete={
+                            showDeleteIcon
+                              ? () =>
+                                  handleCheckboxChange({
+                                    target: { value: type },
+                                  } as React.ChangeEvent<HTMLInputElement>)
+                              : undefined
+                          }
+                        />
+                      </Fade>
                     }
                   />
                 }

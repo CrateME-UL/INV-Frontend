@@ -119,42 +119,18 @@ export const ItemsPage = () => {
     }
   };
   const optionLabelHandler = (option: Place) => option.placeName;
-  const placeTypes = ['INV', 'EXT', 'INT'];
-  const translatePlaceType = (placeType: string) => {
-    switch (placeType) {
-      case 'INV':
-        return 'INV';
-      case 'EXT':
-        return 'OUT';
-      case 'INT':
-        return 'IN';
-      default:
-        return '';
-    }
-  };
 
-  const [selectedPlaceTypes, setSelectedPlaceTypes] =
-    React.useState<string[]>(placeTypes);
+  const [selectedPlaceTypes, setSelectedPlaceTypes] = React.useState<
+    string[]
+  >(['INV', 'EXT', 'INT']);
 
   React.useEffect(() => {
     const filters: { [key: string]: string } | undefined = {
       place_name: '',
-      place_type: '',
     };
 
     if (placeName !== 'Tous' && placeName !== '') {
       filters.place_name = placeName;
-    }
-
-    if (
-      selectedPlaceTypes.length > 0 &&
-      selectedPlaceTypes.length < 3
-    ) {
-      const chipFilters: string[] = [];
-      selectedPlaceTypes.forEach((type) => {
-        chipFilters.push(translatePlaceType(type));
-      });
-      filters.place_type = chipFilters.join(',');
     }
 
     Object.keys(filters).forEach((key) => {
@@ -164,7 +140,33 @@ export const ItemsPage = () => {
     });
 
     handleFetchItems('inventory/items', filters);
-  }, [placeName, selectedPlaceTypes]);
+    const translatePlaceType = (placeType: string) => {
+      switch (placeType) {
+        case 'INV':
+          return 'INV';
+        case 'OUT':
+          return 'EXT';
+        case 'IN':
+          return 'INT';
+        default:
+          return 'UNKNOWN';
+      }
+    };
+    if (placeName !== 'Tous' && placeName !== '') {
+      const selectedPlace = places.find(
+        (place) => place.placeName === placeName
+      );
+      if (selectedPlace) {
+        setSelectedPlaceTypes([
+          translatePlaceType(
+            String(selectedPlace.placeType ?? 'UNKNOWN')
+          ),
+        ]);
+      }
+    } else {
+      setSelectedPlaceTypes(['INV', 'EXT', 'INT']);
+    }
+  }, [placeName, places]);
 
   const handleCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -198,10 +200,11 @@ export const ItemsPage = () => {
         sx={{ mb: 1, mt: 1 }}
       >
         <ChipFilter
-          chips={placeTypes}
+          chips={selectedPlaceTypes}
           selectedChips={selectedPlaceTypes}
           handleCheckboxChange={handleCheckboxChange}
           getChipColor={getPlaceTypeColor}
+          showDeleteIcon={false}
         />
       </Box>
       <Box

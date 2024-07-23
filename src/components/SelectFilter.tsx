@@ -31,7 +31,7 @@ export const SelectFilter = <T,>({
           <TextField
             {...params}
             label={label}
-            placeholder={`Choisissez un ${label}`}
+            placeholder={`Choisissez un ${label.toLowerCase()}`}
           />
         )}
         options={options}

@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef, frFR } from '@mui/x-data-grid';
-import CircularProgress from '@mui/material/CircularProgress';
 import Fade from '@mui/material/Fade';
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorIcon from '@mui/icons-material/Error';
 
 type DataGridProps<T> = {
   error: string | null;
@@ -22,8 +23,11 @@ export const CustomDataGrid = <T,>({
   const [rows, setRows] = useState<T[]>([]);
 
   useEffect(() => {
-    setRows(initialRows);
-    setLoading(false);
+    setLoading(true);
+    setTimeout(() => {
+      setRows(initialRows);
+      setLoading(false);
+    }, 0); // camouflage visual glitch
   }, [initialRows]);
 
   return (
@@ -41,24 +45,28 @@ export const CustomDataGrid = <T,>({
           alignItems="center"
           justifyContent="center"
           sx={{ flexGrow: 1, mt: 3 }}
-        >
-          <CircularProgress />
-        </Box>
+        ></Box>
       ) : (
         <>
-          <Fade in={!loading && !!error} timeout={500}>
+          <Fade in={!loading && !!error} timeout={300} exit={true}>
             <Box
               display={error ? 'flex' : 'none'}
               alignItems="center"
               justifyContent="left"
               sx={{ m: 1.5 }}
             >
+              <ErrorIcon
+                sx={{
+                  mr: 1,
+                }}
+              />
               <Typography component="span">{error}</Typography>
             </Box>
           </Fade>
           <Fade
             in={!loading && !error && rows.length === 0}
-            timeout={500}
+            timeout={300}
+            exit={true}
           >
             <Box
               display={!error && rows.length === 0 ? 'flex' : 'none'}
@@ -66,6 +74,11 @@ export const CustomDataGrid = <T,>({
               justifyContent="left"
               sx={{ m: 1.5 }}
             >
+              <WarningIcon
+                sx={{
+                  mr: 1,
+                }}
+              />
               <Typography component="span">
                 Aucun résultat.
               </Typography>
@@ -73,7 +86,8 @@ export const CustomDataGrid = <T,>({
           </Fade>
           <Fade
             in={!loading && !error && rows.length > 0}
-            timeout={500}
+            timeout={300}
+            exit={true}
           >
             <Box sx={{ flexGrow: 1 }}>
               <DataGrid

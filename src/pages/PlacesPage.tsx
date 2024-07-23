@@ -148,13 +148,38 @@ export const PlacesPage = () => {
     React.useState<string[]>(placeTypes);
 
   React.useEffect(() => {
-    const filters: { [key: string]: string } = {
-      item_name: itemsFilter === 'Tous' ? '' : itemsFilter,
+    const translatePlaceType = (placeType: string) => {
+      switch (placeType) {
+        case 'INV':
+          return 'INV';
+        case 'EXT':
+          return 'OUT';
+        case 'INT':
+          return 'IN';
+        default:
+          return 'UNKNOWN';
+      }
     };
-    if (selectedPlaceTypes.length > 0) {
-      filters.place_type = selectedPlaceTypes.join(',');
+    const filters: { [key: string]: string } = {};
+    if (itemsFilter !== 'Tous' && itemsFilter !== '') {
+      filters.item_name = itemsFilter;
     }
-    console.log('filters', filters);
+    if (selectedPlaceTypes.length > 0) {
+      dispatch({
+        type: 'SET_ERROR',
+        payload: '',
+      });
+      const selectedPlaceTypesTranslated = selectedPlaceTypes.map(
+        translatePlaceType
+      );
+      filters.place_type = selectedPlaceTypesTranslated.join(',');
+    } else {
+      dispatch({
+        type: 'SET_ERROR',
+        payload:
+          "Il faut sélectionner au moins un type d'emplacement.",
+      });
+    }
     handleFetchPlaces('inventory/places', filters);
   }, [itemsFilter, selectedPlaceTypes]);
 
@@ -194,6 +219,7 @@ export const PlacesPage = () => {
           selectedChips={selectedPlaceTypes}
           handleCheckboxChange={handleCheckboxChange}
           getChipColor={getPlaceTypeColor}
+          showDeleteIcon={true}
         />
       </Box>
       <Box
