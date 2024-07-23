@@ -30,17 +30,17 @@ if (rootElement) {
 
   // Render the Inventory component within React.StrictMode and ThemeProvider
   root.render(
-    <React.StrictMode>
-      <ThemeProvider theme={theme}>
-        <GlobalStyles
-          styles={{
-            body: { overflow: 'hidden' },
-            html: { overflow: 'hidden' },
-          }}
-        />
-        <Inventory />
-      </ThemeProvider>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles
+        styles={{
+          body: { overflow: 'hidden' },
+          html: { overflow: 'hidden' },
+        }}
+      />
+      <Inventory />
+    </ThemeProvider>
+    // </React.StrictMode>
   );
 } else {
   // Log an error if the root element is not found
