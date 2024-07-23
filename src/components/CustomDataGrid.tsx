@@ -27,7 +27,7 @@ export const CustomDataGrid = <T,>({
     setTimeout(() => {
       setRows(initialRows);
       setLoading(false);
-    }, 0); // camouflage visual glitch
+    }, 50); // camouflage visual glitch
   }, [initialRows]);
 
   return (
