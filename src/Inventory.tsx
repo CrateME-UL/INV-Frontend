@@ -14,6 +14,7 @@ import { Category, Place } from '@mui/icons-material';
 import { ErrorPage } from './pages/ErrorPage';
 import { ItemsPage } from './pages/ItemsPage';
 import { PlacesPage } from './pages/PlacesPage';
+import { SignInPage } from './pages/SignInPage';
 
 const RouterComponent = () => {
   const [value, setValue] = React.useState(0);
@@ -64,6 +65,8 @@ const RouterComponent = () => {
           <Route path="/" element={<Navigate to="/items" />} />
           <Route path="/items" element={<ItemsPage />} />
           <Route path="/places" element={<PlacesPage />} />
+          <Route path="/signIn" element={<SignInPage />} />
+
           <Route
             path="*"
             element={
