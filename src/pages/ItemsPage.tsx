@@ -13,6 +13,11 @@ import { buildPlace, Place, PlaceDto } from '../models/Place';
 import { SelectFilter } from '../components/SelectFilter';
 import Chip from '@mui/material/Chip';
 import ChipFilter from '../components/ChipFilter';
+import {
+  getPlaceTypeColor,
+  translatePlaceTypeFR,
+} from '../utils/placeTypeUtils';
+import { ALL_PLACE_TYPES_FR, NO_DATA_MESSAGE } from '../constants';
 
 interface InventoryState {
   items: InventoryItem[];
@@ -114,7 +119,7 @@ export const ItemsPage = () => {
     } catch {
       dispatch({
         type: 'SET_ERROR',
-        payload: 'Something went wrong...',
+        payload: 'Une erreur innatendue est survenue...',
       });
     }
   };
@@ -122,7 +127,7 @@ export const ItemsPage = () => {
 
   const [selectedPlaceTypes, setSelectedPlaceTypes] = React.useState<
     string[]
-  >(['INV', 'EXT', 'INT']);
+  >(ALL_PLACE_TYPES_FR);
 
   React.useEffect(() => {
     const filters: { [key: string]: string } | undefined = {
@@ -140,31 +145,19 @@ export const ItemsPage = () => {
     });
 
     handleFetchItems('inventory/items', filters);
-    const translatePlaceType = (placeType: string) => {
-      switch (placeType) {
-        case 'INV':
-          return 'INV';
-        case 'OUT':
-          return 'EXT';
-        case 'IN':
-          return 'INT';
-        default:
-          return 'UNKNOWN';
-      }
-    };
     if (placeName !== 'Tous' && placeName !== '') {
       const selectedPlace = places.find(
         (place) => place.placeName === placeName
       );
       if (selectedPlace) {
         setSelectedPlaceTypes([
-          translatePlaceType(
-            String(selectedPlace.placeType ?? 'UNKNOWN')
+          translatePlaceTypeFR(
+            String(selectedPlace.placeType ?? NO_DATA_MESSAGE)
           ),
         ]);
       }
     } else {
-      setSelectedPlaceTypes(['INV', 'EXT', 'INT']);
+      setSelectedPlaceTypes(ALL_PLACE_TYPES_FR);
     }
   }, [placeName, places]);
 
@@ -177,18 +170,6 @@ export const ItemsPage = () => {
         ? [...prev, value]
         : prev.filter((type) => type !== value)
     );
-  };
-  const getPlaceTypeColor = (placeType: string): string => {
-    switch (placeType) {
-      case 'INV':
-        return '#D2B48C';
-      case 'EXT':
-        return '#98FB98';
-      case 'INT':
-        return '#FFB6C1';
-      default:
-        return '#A9A9A9';
-    }
   };
 
   return (
@@ -266,11 +247,15 @@ export const ItemsPage = () => {
                 </>
               ) : (
                 <Chip
-                  label={option.placeTypeFrench}
+                  label={translatePlaceTypeFR(
+                    String(option.placeType)
+                  )}
                   size="small"
                   sx={{
                     mr: 0.5,
-                    backgroundColor: option.placeTypeColor,
+                    backgroundColor: getPlaceTypeColor(
+                      translatePlaceTypeFR(String(option.placeType))
+                    ),
                     color: 'black',
                     border: '1px solid black',
                     height: '24px',

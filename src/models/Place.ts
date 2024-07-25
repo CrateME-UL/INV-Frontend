@@ -1,4 +1,8 @@
 import { NO_DATA_MESSAGE } from '../constants';
+import {
+  translatePlaceTypeFR,
+  getPlaceTypeColor,
+} from '../utils/placeTypeUtils';
 
 export type PlaceDto = {
   place_id: number | undefined;
@@ -21,33 +25,7 @@ export class Place {
     this.placeId = place.place_id || NO_DATA_MESSAGE;
     this.placeName = place.place_name || NO_DATA_MESSAGE;
     this.placeType = place.place_type || NO_DATA_MESSAGE;
-    this.placeTypeFrench = this.translatePlaceType(this.placeType);
-    this.placeTypeColor = this.getPlaceTypeColor(this.placeType);
-  }
-
-  private translatePlaceType(placeType: string): string {
-    switch (placeType) {
-      case 'INV':
-        return 'INV';
-      case 'OUT':
-        return 'EXT';
-      case 'IN':
-        return 'INT';
-      default:
-        return NO_DATA_MESSAGE;
-    }
-  }
-
-  private getPlaceTypeColor(placeType: string): string {
-    switch (placeType) {
-      case 'INV':
-        return '#D2B48C';
-      case 'OUT':
-        return '#98FB98';
-      case 'IN':
-        return '#FFB6C1';
-      default:
-        return '#A9A9A9';
-    }
+    this.placeTypeFrench = translatePlaceTypeFR(this.placeType);
+    this.placeTypeColor = getPlaceTypeColor(this.placeTypeFrench);
   }
 }

@@ -13,6 +13,12 @@ import {
 } from '../models/InventoryPlace';
 import Chip from '@mui/material/Chip';
 import ChipFilter from '../components/ChipFilter';
+import { ALL_PLACE_TYPES_FR } from '../constants';
+import {
+  getPlaceTypeColor,
+  translatePlaceTypeEN,
+  translatePlaceTypeFR,
+} from '../utils/placeTypeUtils';
 
 interface InventoryState {
   places: InventoryPlace[];
@@ -75,7 +81,9 @@ export const PlacesPage = () => {
                 size="small"
                 sx={{
                   mr: 0.5,
-                  backgroundColor: place.placeTypeColor,
+                  backgroundColor: getPlaceTypeColor(
+                    translatePlaceTypeFR(place.placeType)
+                  ),
                   color: 'black',
                   border: '1px solid black',
                   height: '24px',
@@ -142,24 +150,11 @@ export const PlacesPage = () => {
     }
   };
 
-  const placeTypes = ['INV', 'EXT', 'INT'];
-
-  const [selectedPlaceTypes, setSelectedPlaceTypes] =
-    React.useState<string[]>(placeTypes);
+  const [selectedPlaceTypes, setSelectedPlaceTypes] = React.useState<
+    string[]
+  >(ALL_PLACE_TYPES_FR);
 
   React.useEffect(() => {
-    const translatePlaceType = (placeType: string) => {
-      switch (placeType) {
-        case 'INV':
-          return 'INV';
-        case 'EXT':
-          return 'OUT';
-        case 'INT':
-          return 'IN';
-        default:
-          return 'UNKNOWN';
-      }
-    };
     const filters: { [key: string]: string } = {};
     if (itemsFilter !== 'Tous' && itemsFilter !== '') {
       filters.item_name = itemsFilter;
@@ -169,10 +164,9 @@ export const PlacesPage = () => {
         type: 'SET_ERROR',
         payload: '',
       });
-      const selectedPlaceTypesTranslated = selectedPlaceTypes.map(
-        translatePlaceType
-      );
-      filters.place_type = selectedPlaceTypesTranslated.join(',');
+      filters.place_type = selectedPlaceTypes
+        .map(translatePlaceTypeEN)
+        .join(',');
     } else {
       dispatch({
         type: 'SET_ERROR',
@@ -193,18 +187,6 @@ export const PlacesPage = () => {
         : prev.filter((type) => type !== value)
     );
   };
-  const getPlaceTypeColor = (placeType: string): string => {
-    switch (placeType) {
-      case 'INV':
-        return '#D2B48C';
-      case 'EXT':
-        return '#98FB98';
-      case 'INT':
-        return '#FFB6C1';
-      default:
-        return '#A9A9A9';
-    }
-  };
 
   return (
     <>
@@ -215,7 +197,7 @@ export const PlacesPage = () => {
         sx={{ mb: 1, mt: 1 }}
       >
         <ChipFilter
-          chips={placeTypes}
+          chips={ALL_PLACE_TYPES_FR}
           selectedChips={selectedPlaceTypes}
           handleCheckboxChange={handleCheckboxChange}
           getChipColor={getPlaceTypeColor}
