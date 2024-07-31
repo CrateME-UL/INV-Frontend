@@ -11,6 +11,17 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { buildPlace, Place, PlaceDto } from '../models/Place';
 import { SelectFilter } from '../components/SelectFilter';
+import Chip from '@mui/material/Chip';
+import ChipFilter from '../components/ChipFilter';
+import {
+  getPlaceTypeColor,
+  translatePlaceTypeFR,
+} from '../utils/placeTypeUtils';
+import {
+  ALL_PLACE_TYPES_FR,
+  CHIP_PROPERTIES,
+  NO_DATA_MESSAGE,
+} from '../constants';
 
 interface InventoryState {
   items: InventoryItem[];
@@ -112,43 +123,126 @@ export const ItemsPage = () => {
     } catch {
       dispatch({
         type: 'SET_ERROR',
-        payload: 'Something went wrong...',
+        payload: 'Une erreur innatendue est survenue...',
       });
     }
   };
+  const optionLabelHandler = (option: Place) => option.placeName;
+
+  const [selectedPlaceTypes, setSelectedPlaceTypes] = React.useState<
+    string[]
+  >(ALL_PLACE_TYPES_FR);
 
   React.useEffect(() => {
-    const filters = {
-      place_name: placeName === 'Tous' ? '' : placeName,
+    const filters: { [key: string]: string } | undefined = {
+      place_name: '',
     };
-    if (placeName === 'Tous') {
-      handleFetchItems('inventory/items', undefined);
-      return;
+
+    if (placeName !== 'Tous' && placeName !== '') {
+      filters.place_name = placeName;
     }
+
+    Object.keys(filters).forEach((key) => {
+      if (filters[key] === '') {
+        delete filters[key];
+      }
+    });
+
     handleFetchItems('inventory/items', filters);
-  }, [placeName]);
+    if (placeName !== 'Tous' && placeName !== '') {
+      const selectedPlace = places.find(
+        (place) => place.placeName === placeName
+      );
+      if (selectedPlace) {
+        setSelectedPlaceTypes([
+          translatePlaceTypeFR(
+            String(selectedPlace.placeType ?? NO_DATA_MESSAGE)
+          ),
+        ]);
+      }
+    } else {
+      setSelectedPlaceTypes(ALL_PLACE_TYPES_FR);
+    }
+  }, [placeName, places]);
 
   return (
     <>
       <Box
         display="flex"
-        alignItems="center"
+        alignItems="left"
         justifyContent="left"
-        sx={{ m: 1.5 }}
+        sx={{ mb: 1, mt: 1 }}
       >
-        <Typography component="span">Inventaire</Typography>
+        <ChipFilter
+          chips={selectedPlaceTypes}
+          selectedChips={selectedPlaceTypes}
+          getChipColor={getPlaceTypeColor}
+          showDeleteIcon={false}
+          chipProperties={CHIP_PROPERTIES}
+        />
       </Box>
-      <Box display="flex" alignItems="left" justifyContent="left">
+      <Box
+        display="flex"
+        alignItems="left"
+        justifyContent="left"
+        sx={{ mb: 1 }}
+      >
         <SelectFilter
           label="Lieu"
-          options={places}
-          optionLabelHandler={(option) => option.placeName}
-          onChangeHandler={(value) =>
+          options={[{ placeName: 'Tous' } as Place, ...places]}
+          optionLabelHandler={optionLabelHandler}
+          onChangeHandler={(value) => {
             dispatch({
               type: 'SET_PLACE_FILTER',
               payload: value as string,
-            })
-          }
+            });
+          }}
+          renderOption={(props, option) => (
+            <li {...props} key={optionLabelHandler(option)}>
+              {option.placeName === 'Tous' ? (
+                <>
+                  {ALL_PLACE_TYPES_FR.map((label, index) => (
+                    <Chip
+                      key={index}
+                      label={label}
+                      size="small"
+                      sx={{
+                        mr: 0.5,
+                        backgroundColor:
+                          label === 'INV'
+                            ? getPlaceTypeColor('INV')
+                            : label === 'EXT'
+                            ? getPlaceTypeColor('EXT')
+                            : getPlaceTypeColor('INT'),
+                        color: CHIP_PROPERTIES.color,
+                        border: CHIP_PROPERTIES.border,
+                        height: `${CHIP_PROPERTIES.height}px`,
+                        width: `${CHIP_PROPERTIES.width}px`,
+                      }}
+                    />
+                  ))}
+                </>
+              ) : (
+                <Chip
+                  label={translatePlaceTypeFR(
+                    String(option.placeType)
+                  )}
+                  size="small"
+                  sx={{
+                    mr: 0.5,
+                    backgroundColor: getPlaceTypeColor(
+                      translatePlaceTypeFR(String(option.placeType))
+                    ),
+                    color: CHIP_PROPERTIES.color,
+                    border: CHIP_PROPERTIES.border,
+                    height: `${CHIP_PROPERTIES.height}px`,
+                    width: `${CHIP_PROPERTIES.width}px`,
+                  }}
+                />
+              )}
+              <Typography>{option.placeName}</Typography>
+            </li>
+          )}
         ></SelectFilter>
       </Box>
       <CustomDataGrid

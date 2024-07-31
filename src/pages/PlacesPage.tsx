@@ -11,6 +11,14 @@ import {
   InventoryPlace,
   InventoryPlaceDto,
 } from '../models/InventoryPlace';
+import Chip from '@mui/material/Chip';
+import ChipFilter from '../components/ChipFilter';
+import { ALL_PLACE_TYPES_FR, CHIP_PROPERTIES } from '../constants';
+import {
+  getPlaceTypeColor,
+  translatePlaceTypeEN,
+  translatePlaceTypeFR,
+} from '../utils/placeTypeUtils';
 
 interface InventoryState {
   places: InventoryPlace[];
@@ -58,8 +66,36 @@ export const PlacesPage = () => {
   const { places, items, error, itemsFilter } = state;
 
   const columns: GridColDef[] = [
-    { field: 'placeName', headerName: 'Lieux', width: 260 },
-    { field: 'nbOfItems', headerName: 'Qte', width: 90 },
+    { field: 'nbOfItems', headerName: 'Qte', width: 80 },
+    {
+      field: 'placeName',
+      headerName: 'Lieux',
+      width: 270,
+      renderCell: (params) => {
+        const place = params.row as InventoryPlace;
+        return (
+          <Box display="flex" alignItems="center">
+            {place.placeType && (
+              <Chip
+                label={place.placeTypeFrench}
+                size="small"
+                sx={{
+                  mr: 0.5,
+                  backgroundColor: getPlaceTypeColor(
+                    translatePlaceTypeFR(place.placeType)
+                  ),
+                  color: CHIP_PROPERTIES.color,
+                  border: CHIP_PROPERTIES.border,
+                  height: `${CHIP_PROPERTIES.height}px`,
+                  width: `${CHIP_PROPERTIES.width}px`,
+                }}
+              />
+            )}
+            <Typography>{place.placeName}</Typography>
+          </Box>
+        );
+      },
+    },
   ];
 
   const handleFetchItems = async (path: string) => {
@@ -114,28 +150,67 @@ export const PlacesPage = () => {
     }
   };
 
+  const [selectedPlaceTypes, setSelectedPlaceTypes] = React.useState<
+    string[]
+  >(ALL_PLACE_TYPES_FR);
+
   React.useEffect(() => {
-    const filters = {
-      item_name: itemsFilter === 'Tous' ? '' : itemsFilter,
-    };
-    if (itemsFilter === 'Tous') {
-      handleFetchPlaces('inventory/places', undefined);
-      return;
+    const filters: { [key: string]: string } = {};
+    if (itemsFilter !== 'Tous' && itemsFilter !== '') {
+      filters.item_name = itemsFilter;
+    }
+    if (selectedPlaceTypes.length > 0) {
+      dispatch({
+        type: 'SET_ERROR',
+        payload: '',
+      });
+      filters.place_type = selectedPlaceTypes
+        .map(translatePlaceTypeEN)
+        .join(',');
+    } else {
+      dispatch({
+        type: 'SET_ERROR',
+        payload:
+          "Il faut sélectionner au moins un type d'emplacement.",
+      });
     }
     handleFetchPlaces('inventory/places', filters);
-  }, [itemsFilter]);
+  }, [itemsFilter, selectedPlaceTypes]);
+
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value, checked } = event.target;
+    setSelectedPlaceTypes((prev) =>
+      checked
+        ? [...prev, value]
+        : prev.filter((type) => type !== value)
+    );
+  };
 
   return (
     <>
       <Box
         display="flex"
-        alignItems="center"
+        alignItems="left"
         justifyContent="left"
-        sx={{ m: 1.5 }}
+        sx={{ mb: 1, mt: 1 }}
       >
-        <Typography component="span">Inventaire</Typography>
+        <ChipFilter
+          chips={ALL_PLACE_TYPES_FR}
+          selectedChips={selectedPlaceTypes}
+          handleCheckboxChange={handleCheckboxChange}
+          getChipColor={getPlaceTypeColor}
+          showDeleteIcon={true}
+          chipProperties={CHIP_PROPERTIES}
+        />
       </Box>
-      <Box display="flex" alignItems="left" justifyContent="left">
+      <Box
+        display="flex"
+        alignItems="left"
+        justifyContent="left"
+        sx={{ mb: 1 }}
+      >
         <SelectFilter
           label="Type d'objet"
           options={items}
@@ -146,14 +221,14 @@ export const PlacesPage = () => {
               payload: value as string,
             })
           }
-        ></SelectFilter>
+        />
       </Box>
       <CustomDataGrid
         columns={columns}
         rows={places}
         error={error}
         getRowId={(place: InventoryPlace) => place.placeId}
-      ></CustomDataGrid>
+      />
     </>
   );
 };

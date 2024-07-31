@@ -1,4 +1,8 @@
 import { NO_DATA_MESSAGE } from '../constants';
+import {
+  translatePlaceTypeFR,
+  getPlaceTypeColor,
+} from '../utils/placeTypeUtils';
 
 export type InventoryPlaceDto = {
   place_id: number | undefined;
@@ -18,6 +22,8 @@ export class InventoryPlace {
   placeName: string;
   placeType: string;
   nbOfItems: number | string;
+  placeTypeFrench: string;
+  placeTypeColor: string;
 
   constructor(place: InventoryPlaceDto) {
     this.placeId = place.place_id || NO_DATA_MESSAGE;
@@ -29,5 +35,7 @@ export class InventoryPlace {
           ? place.nb_of_items
           : NO_DATA_MESSAGE
         : NO_DATA_MESSAGE;
+    this.placeTypeFrench = translatePlaceTypeFR(this.placeType);
+    this.placeTypeColor = getPlaceTypeColor(this.placeType);
   }
 }
