@@ -15,6 +15,7 @@ import { ErrorPage } from './pages/ErrorPage';
 import { ItemsPage } from './pages/ItemsPage';
 import { PlacesPage } from './pages/PlacesPage';
 import { SignInPage } from './pages/SignInPage';
+import { ProtectedRoute } from './routes/ProtectedRoute';
 
 const RouterComponent = () => {
   const [value, setValue] = React.useState(0);
@@ -63,9 +64,11 @@ const RouterComponent = () => {
       <Box sx={{ pb: 7 }}>
         <Routes>
           <Route path="/" element={<Navigate to="/items" />} />
-          <Route path="/items" element={<ItemsPage />} />
-          <Route path="/places" element={<PlacesPage />} />
           <Route path="/signIn" element={<SignInPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/items" element={<ItemsPage />} />
+            <Route path="/places" element={<PlacesPage />} />
+          </Route>
 
           <Route
             path="*"

@@ -11,15 +11,25 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useAuth } from '../components/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 export const SignInPage = () => {
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const email = data.get('email');
+    const password = data.get('password');
+
+    if (email && password) {
+      setTimeout(() => {
+        setToken('this is a test token');
+        navigate('/', { replace: true });
+      }, 3000);
+    }
   };
 
   return (

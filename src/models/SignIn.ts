@@ -1,20 +1,20 @@
 import { NO_DATA_MESSAGE } from '../constants';
 
-export type SignInDto = {
-  sign_in_email: string | undefined;
-  sign_in_pass: string | undefined;
+export type UserDto = {
+  user_email: string | undefined;
+  user_password: string | undefined;
 };
 
-export const buildSignIn = (signIn: SignInDto): SignIn => {
-  return new SignIn(signIn);
+export const buildUser = (user: UserDto): User => {
+  return new User(user);
 };
 
-export class SignIn {
-  signInEmail: string | string;
-  signInPass: string | string;
+export class User {
+  userEmail: string | string;
+  userPass: string | string;
 
-  constructor(signIn: SignInDto) {
-    this.signInEmail = signIn.sign_in_email || NO_DATA_MESSAGE;
-    this.signInPass = signIn.sign_in_pass || NO_DATA_MESSAGE;
+  constructor(signIn: UserDto) {
+    this.userEmail = signIn.user_email || NO_DATA_MESSAGE;
+    this.userPass = signIn.user_password || NO_DATA_MESSAGE;
   }
 }
