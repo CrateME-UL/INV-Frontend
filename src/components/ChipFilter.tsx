@@ -10,11 +10,17 @@ import Fade from '@mui/material/Fade';
 interface ChipFilterProps {
   chips: string[];
   selectedChips: string[];
-  handleCheckboxChange: (
+  handleCheckboxChange?: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
   getChipColor: (Chip: string) => string;
   showDeleteIcon: boolean;
+  chipProperties: {
+    height: number;
+    width: number;
+    color: string;
+    border: string;
+  };
 }
 
 const ChipFilter: React.FC<ChipFilterProps> = ({
@@ -23,6 +29,7 @@ const ChipFilter: React.FC<ChipFilterProps> = ({
   handleCheckboxChange,
   getChipColor,
   showDeleteIcon,
+  chipProperties: chipProperties,
 }) => {
   return (
     <Box
@@ -69,10 +76,10 @@ const ChipFilter: React.FC<ChipFilterProps> = ({
                           size="small"
                           sx={{
                             backgroundColor: 'transparent',
-                            color: 'black',
-                            border: '1px solid black',
-                            height: '24px',
-                            width: '44px',
+                            color: chipProperties.color,
+                            border: chipProperties.border,
+                            height: `${chipProperties.height}px`,
+                            width: `${chipProperties.width}px`,
                           }}
                         />
                       </Fade>
@@ -88,22 +95,28 @@ const ChipFilter: React.FC<ChipFilterProps> = ({
                           size="small"
                           sx={{
                             backgroundColor: getChipColor(type),
-                            color: 'black',
-                            border: '1px solid black',
-                            height: '24px',
-                            width: showDeleteIcon ? '64px' : '44px',
+                            color: chipProperties.color,
+                            border: chipProperties.border,
+                            height: `${chipProperties.height}px`,
+                            width: showDeleteIcon
+                              ? `${chipProperties.width + 20}px`
+                              : chipProperties.width,
                             '& .MuiChip-deleteIcon': {
-                              color: 'black',
-                              fontSize: '14px',
+                              color: chipProperties.color,
+                              fontSize: `${
+                                chipProperties.height - 10
+                              }px`,
                               cursor: 'pointer',
                             },
                           }}
                           onDelete={
                             showDeleteIcon
-                              ? () =>
-                                  handleCheckboxChange({
-                                    target: { value: type },
-                                  } as React.ChangeEvent<HTMLInputElement>)
+                              ? handleCheckboxChange
+                                ? () =>
+                                    handleCheckboxChange({
+                                      target: { value: type },
+                                    } as React.ChangeEvent<HTMLInputElement>)
+                                : undefined
                               : undefined
                           }
                         />

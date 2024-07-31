@@ -17,7 +17,11 @@ import {
   getPlaceTypeColor,
   translatePlaceTypeFR,
 } from '../utils/placeTypeUtils';
-import { ALL_PLACE_TYPES_FR, NO_DATA_MESSAGE } from '../constants';
+import {
+  ALL_PLACE_TYPES_FR,
+  CHIP_PROPERTIES,
+  NO_DATA_MESSAGE,
+} from '../constants';
 
 interface InventoryState {
   items: InventoryItem[];
@@ -161,17 +165,6 @@ export const ItemsPage = () => {
     }
   }, [placeName, places]);
 
-  const handleCheckboxChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { value, checked } = event.target;
-    setSelectedPlaceTypes((prev) =>
-      checked
-        ? [...prev, value]
-        : prev.filter((type) => type !== value)
-    );
-  };
-
   return (
     <>
       <Box
@@ -183,9 +176,9 @@ export const ItemsPage = () => {
         <ChipFilter
           chips={selectedPlaceTypes}
           selectedChips={selectedPlaceTypes}
-          handleCheckboxChange={handleCheckboxChange}
           getChipColor={getPlaceTypeColor}
           showDeleteIcon={false}
+          chipProperties={CHIP_PROPERTIES}
         />
       </Box>
       <Box
@@ -208,42 +201,26 @@ export const ItemsPage = () => {
             <li {...props} key={optionLabelHandler(option)}>
               {option.placeName === 'Tous' ? (
                 <>
-                  <Chip
-                    label="INV"
-                    size="small"
-                    sx={{
-                      mr: 0.5,
-                      backgroundColor: '#D2B48C',
-                      color: 'black',
-                      border: '1px solid black',
-                      height: '24px',
-                      width: '44px',
-                    }}
-                  />
-                  <Chip
-                    label="EXT"
-                    size="small"
-                    sx={{
-                      mr: 0.5,
-                      backgroundColor: '#98FB98',
-                      color: 'black',
-                      border: '1px solid black',
-                      height: '24px',
-                      width: '44px',
-                    }}
-                  />
-                  <Chip
-                    label="INT"
-                    size="small"
-                    sx={{
-                      mr: 0.5,
-                      backgroundColor: '#FFB6C1',
-                      color: 'black',
-                      border: '1px solid black',
-                      height: '24px',
-                      width: '44px',
-                    }}
-                  />
+                  {ALL_PLACE_TYPES_FR.map((label, index) => (
+                    <Chip
+                      key={index}
+                      label={label}
+                      size="small"
+                      sx={{
+                        mr: 0.5,
+                        backgroundColor:
+                          label === 'INV'
+                            ? getPlaceTypeColor('INV')
+                            : label === 'EXT'
+                            ? getPlaceTypeColor('EXT')
+                            : getPlaceTypeColor('INT'),
+                        color: CHIP_PROPERTIES.color,
+                        border: CHIP_PROPERTIES.border,
+                        height: `${CHIP_PROPERTIES.height}px`,
+                        width: `${CHIP_PROPERTIES.width}px`,
+                      }}
+                    />
+                  ))}
                 </>
               ) : (
                 <Chip
@@ -256,10 +233,10 @@ export const ItemsPage = () => {
                     backgroundColor: getPlaceTypeColor(
                       translatePlaceTypeFR(String(option.placeType))
                     ),
-                    color: 'black',
-                    border: '1px solid black',
-                    height: '24px',
-                    width: '44px',
+                    color: CHIP_PROPERTIES.color,
+                    border: CHIP_PROPERTIES.border,
+                    height: `${CHIP_PROPERTIES.height}px`,
+                    width: `${CHIP_PROPERTIES.width}px`,
                   }}
                 />
               )}

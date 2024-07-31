@@ -13,7 +13,7 @@ import {
 } from '../models/InventoryPlace';
 import Chip from '@mui/material/Chip';
 import ChipFilter from '../components/ChipFilter';
-import { ALL_PLACE_TYPES_FR } from '../constants';
+import { ALL_PLACE_TYPES_FR, CHIP_PROPERTIES } from '../constants';
 import {
   getPlaceTypeColor,
   translatePlaceTypeEN,
@@ -84,10 +84,10 @@ export const PlacesPage = () => {
                   backgroundColor: getPlaceTypeColor(
                     translatePlaceTypeFR(place.placeType)
                   ),
-                  color: 'black',
-                  border: '1px solid black',
-                  height: '24px',
-                  width: '44px',
+                  color: CHIP_PROPERTIES.color,
+                  border: CHIP_PROPERTIES.border,
+                  height: `${CHIP_PROPERTIES.height}px`,
+                  width: `${CHIP_PROPERTIES.width}px`,
                 }}
               />
             )}
@@ -202,6 +202,7 @@ export const PlacesPage = () => {
           handleCheckboxChange={handleCheckboxChange}
           getChipColor={getPlaceTypeColor}
           showDeleteIcon={true}
+          chipProperties={CHIP_PROPERTIES}
         />
       </Box>
       <Box
