@@ -64,7 +64,7 @@ const RouterComponent = () => {
       <Box sx={{ pb: 7 }}>
         <Routes>
           <Route path="/" element={<Navigate to="/items" />} />
-          <Route path="/signIn" element={<SignInPage />} />
+          <Route path="/login" element={<SignInPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/items" element={<ItemsPage />} />
             <Route path="/places" element={<PlacesPage />} />

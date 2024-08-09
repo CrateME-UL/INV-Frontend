@@ -13,8 +13,8 @@ export class User {
   userEmail: string | string;
   userPass: string | string;
 
-  constructor(signIn: UserDto) {
-    this.userEmail = signIn.user_email || NO_DATA_MESSAGE;
-    this.userPass = signIn.user_password || NO_DATA_MESSAGE;
+  constructor(login: UserDto) {
+    this.userEmail = login.user_email || NO_DATA_MESSAGE;
+    this.userPass = login.user_password || NO_DATA_MESSAGE;
   }
 }

@@ -13,22 +13,46 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useAuth } from '../components/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const SignInPage = () => {
   const { setToken } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
 
     if (email && password) {
-      setTimeout(() => {
-        setToken('this is a test token');
-        navigate('/', { replace: true });
-      }, 3000);
+      try {
+        const user_email = email.toString();
+        const user_password = password.toString();
+        const response = await axios.post(
+          'http://localhost:3000/login',
+          {
+            user_email,
+            user_password,
+          }
+        );
+        console.log(response);
+        const { token } = response.data;
+        console.log(token.toString());
+        if (token) {
+          setToken(token);
+          navigate('/', { replace: true });
+        } else {
+          console.log('Authentication failed');
+        }
+      } catch (error) {
+        console.log('Invalid email or password');
+      }
+    } else {
+      // Handle empty fields (optional)
+      console.log('Please fill in both fields');
     }
   };
 
@@ -47,7 +71,7 @@ export const SignInPage = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          se connrcter
         </Typography>
         <Box
           component="form"
@@ -90,7 +114,7 @@ export const SignInPage = () => {
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
-                Forgot password?
+                mot de pass oublié?
               </Link>
             </Grid>
           </Grid>
@@ -99,3 +123,6 @@ export const SignInPage = () => {
     </Container>
   );
 };
+function setError(arg0: string) {
+  throw new Error('Function not implemented.');
+}
