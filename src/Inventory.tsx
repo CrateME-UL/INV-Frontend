@@ -6,20 +6,24 @@ import {
   Link,
   Navigate,
   useLocation,
+  useNavigate,
 } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import { Category, Place } from '@mui/icons-material';
+import { Category, Place, Logout } from '@mui/icons-material';
 import { ErrorPage } from './pages/ErrorPage';
 import { ItemsPage } from './pages/ItemsPage';
 import { PlacesPage } from './pages/PlacesPage';
 import { SignInPage } from './pages/SignInPage';
 import { ProtectedRoute } from './routes/ProtectedRoute';
+import { useAuth } from './components/AuthProvider';
 
 const RouterComponent = () => {
   const [value, setValue] = React.useState(0);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   React.useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -53,6 +57,13 @@ const RouterComponent = () => {
     }
   }, [location.pathname]);
 
+  const shouldShowNavigation = location.pathname !== '/login';
+
+  const handleSignOut = () => {
+    setToken(null);
+    navigate('/login', { replace: true });
+  };
+
   return (
     <Box
       sx={{
@@ -61,7 +72,7 @@ const RouterComponent = () => {
         position: 'relative',
       }}
     >
-      <Box sx={{ pb: 7 }}>
+      <Box sx={{ pb: shouldShowNavigation ? 7 : 0 }}>
         <Routes>
           <Route path="/" element={<Navigate to="/items" />} />
           <Route path="/login" element={<SignInPage />} />
@@ -81,41 +92,49 @@ const RouterComponent = () => {
           />
         </Routes>
       </Box>
-      <Box
-        sx={{
-          width: '100%',
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-        }}
-      >
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(_event, newValue) => {
-            setValue(newValue);
+      {shouldShowNavigation && (
+        <Box
+          sx={{
+            width: '100%',
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1000,
           }}
         >
-          <BottomNavigationAction
-            id={'itemsLink'}
-            component={Link}
-            to="/items"
-            label="Objets"
-            icon={<Category />}
-            tabIndex={0}
-          />
-          <BottomNavigationAction
-            id={'placesLink'}
-            component={Link}
-            to="/places"
-            label="Lieux"
-            icon={<Place />}
-            tabIndex={1}
-          />
-        </BottomNavigation>
-      </Box>
+          <BottomNavigation
+            showLabels
+            value={value}
+            onChange={(_event, newValue) => {
+              setValue(newValue);
+            }}
+          >
+            <BottomNavigationAction
+              id={'itemsLink'}
+              component={Link}
+              to="/items"
+              label="Objets"
+              icon={<Category />}
+              tabIndex={0}
+            />
+            <BottomNavigationAction
+              id={'placesLink'}
+              component={Link}
+              to="/places"
+              label="Lieux"
+              icon={<Place />}
+              tabIndex={1}
+            />
+            <BottomNavigationAction
+              label="Déconnexion"
+              icon={<Logout />}
+              onClick={handleSignOut}
+              tabIndex={2}
+            />
+          </BottomNavigation>
+        </Box>
+      )}
     </Box>
   );
 };
