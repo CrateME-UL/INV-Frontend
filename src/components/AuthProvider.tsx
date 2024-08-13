@@ -1,25 +1,30 @@
 import axios from 'axios';
 import {
   createContext,
-  useContext,
   useEffect,
   useMemo,
   useState,
+  ReactNode,
 } from 'react';
 
-const AuthContext = createContext<any>(null);
+interface AuthContextType {
+  token: string | null;
+  setToken: (newToken: string | null) => void;
+}
+
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  // State to hold the authentication token
   const [token, setToken_] = useState<string | null>(
     localStorage.getItem('token')
   );
 
-  // Function to set the authentication token
   const setToken = (newToken: string | null) => {
     setToken_(newToken);
   };
@@ -35,7 +40,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, [token]);
 
-  // Memoized value of the authentication context
   const contextValue = useMemo(
     () => ({
       token,
@@ -44,16 +48,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     [token]
   );
 
-  // Provide the authentication context to the children components
   return (
     <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  return useContext(AuthContext);
 };
 
 export default AuthProvider;

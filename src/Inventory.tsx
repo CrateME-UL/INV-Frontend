@@ -17,7 +17,7 @@ import { ItemsPage } from './pages/ItemsPage';
 import { PlacesPage } from './pages/PlacesPage';
 import { SignInPage } from './pages/SignInPage';
 import { ProtectedRoute } from './routes/ProtectedRoute';
-import { useAuth } from './components/AuthProvider';
+import { useAuth } from './utils/useAuth';
 
 const RouterComponent = () => {
   const [value, setValue] = React.useState(0);
