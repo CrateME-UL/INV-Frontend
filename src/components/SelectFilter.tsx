@@ -6,14 +6,22 @@ type SelectFilter<T> = {
   optionLabelHandler: (option: T) => string;
   onChangeHandler: (value: React.SetStateAction<string>) => void;
   label: string;
+  renderOption?: (
+    props: React.HTMLAttributes<HTMLLIElement>,
+    option: T
+  ) => React.ReactNode;
 };
+
 export const SelectFilter = <T,>({
   options: options,
   optionLabelHandler: optionLabelHandler,
   onChangeHandler: onChangeHandler,
   label,
+  renderOption,
 }: SelectFilter<T>) => {
   const [optionName, setOptionName] = React.useState('');
+  const allOption = { label: 'Tous', value: '' } as unknown as T;
+  const extendedOptions = [allOption, ...options];
 
   return (
     <Box sx={{ width: '100%', alignContent: 'flex-start' }}>
@@ -23,13 +31,13 @@ export const SelectFilter = <T,>({
           <TextField
             {...params}
             label={label}
-            placeholder={`Choisissez un ${label}`}
+            placeholder={`Choisissez un ${label.toLowerCase()}`}
           />
         )}
         options={options}
         getOptionLabel={optionLabelHandler}
         value={
-          options.find(
+          extendedOptions.find(
             (option) => optionLabelHandler(option) === optionName
           ) || null
         }
@@ -41,6 +49,8 @@ export const SelectFilter = <T,>({
         }}
         noOptionsText="Aucune option"
         fullWidth
+        blurOnSelect={true}
+        renderOption={renderOption}
       />
     </Box>
   );
