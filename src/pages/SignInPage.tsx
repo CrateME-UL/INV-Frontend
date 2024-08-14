@@ -3,10 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
-// import Link from '@mui/material/Link';
-// import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -33,7 +29,7 @@ export const SignInPage = () => {
         const user_email = email.toString();
         const user_password = password.toString();
         const response = await axios.post(
-          'http://localhost:3000/login',
+          `${import.meta.env.VITE_API_ENDPOINT}/login`,
           {
             user_email,
             user_password,
@@ -106,13 +102,6 @@ export const SignInPage = () => {
           >
             Connexion
           </Button>
-          {/* <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                mot de pass oublié?
-              </Link>
-            </Grid>
-          </Grid> */}
         </Box>
       </Box>
     </Container>
