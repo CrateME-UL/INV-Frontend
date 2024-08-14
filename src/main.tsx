@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom/client';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { Inventory } from './Inventory';
+import AuthProvider from './components/AuthProvider';
 
 // Define a custom theme
 export const theme = createTheme({
@@ -37,7 +38,9 @@ if (rootElement) {
           html: { overflow: 'hidden' },
         }}
       />
-      <Inventory />
+      <AuthProvider>
+        <Inventory />
+      </AuthProvider>
     </ThemeProvider>
     // </React.StrictMode>
   );
