@@ -45,4 +45,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            VITE_API_ENDPOINT=172.30.47.201/api/v1
+            VITE_API_ENDPOINT=http://172.30.47.201/api/v1

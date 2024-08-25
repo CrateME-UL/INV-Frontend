@@ -9,7 +9,6 @@ export const getResponse = async <T>(
   params?: { [key: string]: string } | undefined
 ): Promise<T | Error> => {
   try {
-    console.log(`GET ${API_ENDPOINT}/${path}`);
     const result = await axios.get(
       `${API_ENDPOINT}/${path}`,
       params ? { params } : undefined
