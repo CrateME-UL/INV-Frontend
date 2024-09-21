@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { DataGrid, GridColDef, frFR } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Fade from '@mui/material/Fade';
 import WarningIcon from '@mui/icons-material/Warning';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -101,9 +101,6 @@ export const CustomDataGrid = <T,>({
                 }}
                 disableColumnMenu
                 pageSizeOptions={[5, 10]}
-                localeText={
-                  frFR.components.MuiDataGrid.defaultProps.localeText
-                }
               />
             </Box>
           </Fade>
