@@ -1,5 +1,98 @@
 # Frontend
 
+## add to ./.vscode/settings.json
+
+```json
+{
+  // enable globally (here: format on save)
+  "editor.formatOnSave": true,
+  // enable per-language (here: Prettier as formatter)
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  //try to fix lint on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact"
+  ],
+  //colors :)
+  "peacock.color": "#8d37f5",
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#ec7ae0",
+    "activityBar.background": "#ec7ae0",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#e5ef8f",
+    "activityBarBadge.foreground": "#15202b",
+    "commandCenter.border": "#15202b99",
+    "sash.hoverBorder": "#ec7ae0",
+    "statusBar.background": "#e54ed5",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#de22ca",
+    "statusBarItem.remoteBackground": "#e54ed5",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#e54ed5",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#e54ed599",
+    "titleBar.inactiveForeground": "#15202b99"
+  },
+  "peacock.remoteColor": "#e54ed5"
+}
+```
+
+## follow the epub the-road-to-react for for more information on setup installation
+
+## guide for scss -> make sure to code in styles.module.scss
+
+https://sass-lang.com/guide/
+
+## run this commmand in the styles folder in another terminal to autocompile css from change scss (install sass on computer)
+
+```bash
+sass --watch styles.module.scss styles.module.css
+```
+
+## run the test server in another terminal
+
+```bash
+npm run test
+```
+
+## to run the app server in another terminal
+
+```bash
+npm install
+npm run dev
+```
+
+## to run lint/prettier: save file
+
+## to build the docker image:
+
+```bash
+docker build -t inv-ui .
+```
+
+## usefull command
+
+```bash
+git rm --cached . -r
+```
+
 ## vscode extensions to install in general
 
 - yzhang.markdown-all-in-one
@@ -36,71 +129,3 @@
 - kisstkondoros.vscode-codemetrics
 - stringham.move-ts
 - WallabyJs.quokka-vscode
-
-## to setup react with lint and prettier
-
-https://www.robinwieruch.de/prettier-eslint/
-
-## to setup react with typescript
-
-https://www.robinwieruch.de/vite-typescript/
-
-## create from template react and typescript
-
-```bash
-npm create vite@latest hacker-stories -- --template react-ts
-```
-
-## add to ./.vscode/settings.json
-
-```json
-  // enable globally (here: format on save)
-  "editor.formatOnSave": true,
-  // enable per-language (here: Prettier as formatter)
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  //try to fix lint on save
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "eslint.validate": [
-    "javascript,",
-    "typescript",
-    "javascriptreact",
-    "typescriptreact"
-  ]
-```
-
-## follow the epub the-road-to-react for for more information
-
-## guide for scss -> make sure to code in styles.module.scss
-
-https://sass-lang.com/guide/
-
-## run this commmand in the styles folder in another terminal to autocompile css from change scss (install sass on computer)
-
-```bash
-sass --watch styles.module.scss styles.module.css
-```
-
-## run the test server in another terminal
-
-```bash
-npm run test
-```
-
-## to run the app server in another terminal
-
-```bash
-npm install
-npm run dev
-```
-
-## to run lint/prettier: save file
-
-## to build the docker image:
-
-```bash
-docker build -t inv-ui .
-```

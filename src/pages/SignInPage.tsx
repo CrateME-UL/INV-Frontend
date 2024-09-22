@@ -43,7 +43,7 @@ export const SignInPage = () => {
           console.log('Authentication failed');
         }
       } catch (error) {
-        console.log('Invalid email or password');
+        console.log(error + ': Invalid email or password');
       }
     } else {
       console.log('Please fill in both fields');

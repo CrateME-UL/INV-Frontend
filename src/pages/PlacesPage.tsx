@@ -80,7 +80,8 @@ export const PlacesPage = () => {
                 label={place.placeTypeFrench}
                 size="small"
                 sx={{
-                  mr: 0.5,
+                  mr: 1.5,
+                  mt: 1.5,
                   backgroundColor: getPlaceTypeColor(
                     translatePlaceTypeFR(place.placeType)
                   ),
@@ -91,7 +92,9 @@ export const PlacesPage = () => {
                 }}
               />
             )}
-            <Typography>{place.placeName}</Typography>
+            <Typography sx={{ mt: 1.5 }}>
+              {place.placeName}
+            </Typography>
           </Box>
         );
       },
