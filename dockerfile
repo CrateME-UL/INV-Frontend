@@ -3,7 +3,7 @@ WORKDIR /app
 ARG VITE_API_ENDPOINT
 ENV VITE_API_ENDPOINT=${VITE_API_ENDPOINT}
 COPY . .
-RUN npm ci
+RUN npm install
 RUN npm run build
 
 FROM nginx:1.27.0
